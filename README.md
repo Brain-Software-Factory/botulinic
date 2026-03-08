@@ -1,6 +1,6 @@
 # Botulinic
 
-Sitio web corporativo estático para **Botulinic**, construido como landing multipágina con HTML, CSS y JavaScript vanilla sobre el template Medinest (BootstrapMade). Diseñado para desplegarse en entornos estáticos (por ejemplo, nginx) sin backend.
+Sitio web corporativo estático para **Botulinic**, desarrollado por **Brain Software Factory**. Landing multipágina con HTML, CSS y JavaScript vanilla, diseñada para desplegarse en entornos estáticos (por ejemplo, nginx) sin backend.
 
 ---
 
@@ -76,8 +76,6 @@ botulinic/
 | **Componentes** | Bootstrap 5, Bootstrap Icons, Font Awesome, AOS, GLightbox, Swiper, PureCounter, Isotope, ImagesLoaded |
 | **Formularios** | Envío vía `fetch()`: contacto → webhook JSON; turnos → FormData a `action` (PHP si está disponible) |
 
-Template base: [Medinest](https://bootstrapmade.com/medinest-bootstrap-hospital-template/) (BootstrapMade), adaptado como Botulinic.
-
 ---
 
 ## Ejecución local
@@ -135,7 +133,7 @@ Ejemplo de cuerpo:
 Implementación:
 
 - El `<form>` incluye el atributo `data-webhook` con la URL del webhook.
-- El script `assets/vendor/php-email-form/validate.js` detecta formularios con `data-webhook`, serializa los campos en JSON y los envía con `fetch()`. Reutiliza los elementos `.loading`, `.error-message` y `.sent-message` del template para feedback visual.
+- El script `assets/vendor/php-email-form/validate.js` detecta formularios con `data-webhook`, serializa los campos en JSON y los envía con `fetch()`. Reutiliza los elementos `.loading`, `.error-message` y `.sent-message` del formulario para el feedback visual.
 
 Para cambiar el webhook, editar en `contact.html` el valor de `data-webhook` en el formulario de contacto.
 
@@ -181,9 +179,7 @@ No se usan procesos de build; los cambios se reflejan al recargar o al volver a 
 
 ## Licencia y créditos
 
-- **Template:** [Medinest](https://bootstrapmade.com/medinest-bootstrap-hospital-template/) — BootstrapMade  
-- **Licencia del template:** [BootstrapMade License](https://bootstrapmade.com/license/)  
 - **Sitio / marca:** Botulinic  
 - **Desarrollo:** [Brain Software Factory](https://brain.com.ar)
 
-El formulario de contacto utiliza envío a webhook en JSON (implementación propia sobre el flujo del template). El resto de la estructura y estilos del template se mantienen según la licencia de BootstrapMade.
+Desarrollado por Brain Software Factory. El formulario de contacto envía los datos en JSON a un webhook externo para su procesamiento.
