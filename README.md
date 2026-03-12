@@ -114,7 +114,7 @@ No es necesario configurar PHP ni otro backend para que el formulario de contact
 El formulario de la página **Contacto** (`contact.html`) no utiliza backend propio. El envío se hace desde el navegador con `fetch()` en **JSON** a un webhook externo.
 
 - **URL del webhook:**  
-  `https://webhookdev.brain.com.ar/webhook/form-web`
+  `https://webhook.botulinic.com.ar/webhook/form-web`
 - **Método:** `POST`
 - **Cabecera:** `Content-Type: application/json`
 - **Campos enviados:** `name`, `email`, `subject`, `message`
