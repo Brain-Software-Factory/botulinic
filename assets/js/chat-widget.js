@@ -7,7 +7,7 @@
 
   var defaultConfig = {
     webhook: {
-      url: "https://webhookdev.brain.com.ar/webhook/c1a6f9ab-421d-47f6-91f4-8270439d5067/chat",
+      url: "https://webhook.botulinic.com.ar/webhook/c1a6f9ab-421d-47f6-91f4-8270439d5067/chat",
       route: "general",
     },
     style: {
