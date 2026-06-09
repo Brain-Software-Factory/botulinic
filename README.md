@@ -36,31 +36,19 @@ botulinic/
 ├── about.html              # Nosotros
 ├── contact.html            # Contacto (formulario → webhook)
 ├── appointment.html        # Turnos
-├── departments.html        # Departamentos
-├── department-details.html # Detalle de departamento
 ├── services.html           # Servicios
-├── service-details.html    # Detalle de servicio
-├── doctors.html            # Profesionales
-├── testimonials.html       # Testimonios
-├── faq.html                # Preguntas frecuentes
-├── gallery.html            # Galería
 ├── terms.html              # Términos y condiciones
 ├── privacy.html            # Política de privacidad
-├── 404.html                # Página de error
 ├── assets/
 │   ├── css/
 │   │   ├── main.css        # Estilos principales y variables del tema
 │   │   └── chat-widget.css # Estilos del widget de chat
 │   ├── js/
-│   │   ├── main.js         # Navegación, AOS, Isotope, Swiper, FAQ, etc.
+│   │   ├── main.js         # Navegación, AOS, GLightbox, PureCounter, etc.
+│   │   ├── form-webhook.js # Envío de formularios al webhook (JSON)
 │   │   └── chat-widget.js  # Widget de chat (webhook)
 │   ├── img/                # Imágenes y favicon
-│   └── vendor/             # Bootstrap, iconos, AOS, GLightbox, Swiper, etc.
-│       └── php-email-form/
-│           └── validate.js # Validación y envío de formularios (webhook/FormData)
-└── forms/                  # Scripts PHP (opcionales; contacto usa webhook)
-    ├── contact.php
-    └── appointment.php
+│   └── vendor/             # Bootstrap, iconos, AOS, GLightbox, etc.
 ```
 
 ---
@@ -73,8 +61,8 @@ botulinic/
 | **Estilos** | CSS3, variables CSS (`main.css`), Bootstrap 5.3.7 |
 | **Scripts** | JavaScript vanilla (sin frameworks), IIFE, `"use strict"` |
 | **Fuentes** | Google Fonts: Roboto, Poppins, Ubuntu |
-| **Componentes** | Bootstrap 5, Bootstrap Icons, Font Awesome, AOS, GLightbox, Swiper, PureCounter, Isotope, ImagesLoaded |
-| **Formularios** | Envío vía `fetch()`: contacto → webhook JSON; turnos → FormData a `action` (PHP si está disponible) |
+| **Componentes** | Bootstrap 5, Bootstrap Icons, Font Awesome, AOS, GLightbox, PureCounter |
+| **Formularios** | Envío vía `fetch()` en JSON al webhook (`data-webhook`), tanto contacto como turnos |
 
 ---
 
@@ -101,7 +89,7 @@ Abrir en el navegador la URL indicada (por ejemplo `http://localhost:3000` o `ht
 
 El sitio es **100 % estático**. Se puede desplegar en:
 
-- **Nginx**: apuntar `root` (o `alias`) a la carpeta del proyecto y configurar `index index.html` y, si se desea, reglas para SPA/404 (por ejemplo, devolver `404.html` para rutas no encontradas).
+- **Nginx**: apuntar `root` (o `alias`) a la carpeta del proyecto y configurar `index index.html`.
 - **Apache**: habilitar `mod_rewrite` si se usan URLs amigables; por defecto los enlaces son a `.html`.
 - **CDN / hosting estático**: Netlify, Vercel, GitHub Pages, S3 + CloudFront, etc. Subir la carpeta tal cual; no se requiere build.
 
@@ -109,15 +97,16 @@ No es necesario configurar PHP ni otro backend para que el formulario de contact
 
 ---
 
-## Formulario de contacto y webhook
+## Formularios y webhook
 
-El formulario de la página **Contacto** (`contact.html`) no utiliza backend propio. El envío se hace desde el navegador con `fetch()` en **JSON** a un webhook externo.
+Los formularios de **Contacto** (`contact.html`) y **Turnos** (`appointment.html`) no utilizan backend propio. El envío se hace desde el navegador con `fetch()` en **JSON** a un webhook externo.
 
 - **URL del webhook:**  
   `https://webhook.botulinic.com.ar/webhook/form-web`
 - **Método:** `POST`
 - **Cabecera:** `Content-Type: application/json`
-- **Campos enviados:** `name`, `email`, `subject`, `message`
+- **Campos enviados (contacto):** `name`, `email`, `subject`, `message`
+- **Campos enviados (turnos):** `name`, `email`, `phone`, `department`, `date`, `doctor`, `message`
 
 Ejemplo de cuerpo:
 
@@ -132,10 +121,10 @@ Ejemplo de cuerpo:
 
 Implementación:
 
-- El `<form>` incluye el atributo `data-webhook` con la URL del webhook.
-- El script `assets/vendor/php-email-form/validate.js` detecta formularios con `data-webhook`, serializa los campos en JSON y los envía con `fetch()`. Reutiliza los elementos `.loading`, `.error-message` y `.sent-message` del formulario para el feedback visual.
+- Cada `<form>` incluye el atributo `data-webhook` con la URL del webhook.
+- El script `assets/js/form-webhook.js` detecta los formularios con `data-webhook`, serializa todos sus campos en JSON y los envía con `fetch()`. Usa los elementos `.loading`, `.error-message` y `.sent-message` del formulario para el feedback visual.
 
-Para cambiar el webhook, editar en `contact.html` el valor de `data-webhook` en el formulario de contacto.
+Para cambiar el webhook, editar el valor de `data-webhook` en el formulario correspondiente.
 
 ---
 
@@ -149,18 +138,12 @@ El sitio incluye un widget de chat integrado (`assets/js/chat-widget.js` y `asse
 
 | Página | Descripción |
 |--------|-------------|
-| **Inicio** | Hero, estadísticas, llamados a la acción, servicios y departamentos |
+| **Inicio** | Hero, estadísticas, llamados a la acción y servicios |
 | **Nosotros** | Presentación de la organización |
-| **Departamentos** | Listado y detalle de departamentos |
-| **Servicios** | Listado y detalle de servicios |
-| **Profesionales** | Equipo médico o staff |
+| **Servicios** | Listado de servicios |
 | **Turnos** | Formulario de solicitud de citas |
 | **Contacto** | Formulario de contacto (envío a webhook) |
-| **Testimonios** | Opiniones de pacientes o clientes |
-| **FAQ** | Preguntas frecuentes |
-| **Galería** | Galería de imágenes |
 | **Términos** / **Privacidad** | Avisos legales |
-| **404** | Página de error no encontrado |
 
 La navegación (header fijo, menú desktop y móvil, dropdowns) y el footer se repiten en todas las páginas; el contenido central y la clase del `body` (por ejemplo `contact-page`) varían por sección.
 
