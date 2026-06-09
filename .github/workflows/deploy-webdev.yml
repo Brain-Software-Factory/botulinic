@@ -1,0 +1,41 @@
+name: Deploy a webdev (Brain VPS)
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-webdev
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.BRAIN_DEPLOY_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          echo "167.86.86.163 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKuH/yIqVrxlE+PtssQgLCMi8dYBDeRUXEZesf2rT5f4" >> ~/.ssh/known_hosts
+
+      - name: Deploy (rsync)
+        run: |
+          rsync -az --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='README.md' \
+            --exclude='Readme.txt' \
+            -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes" \
+            ./ root@167.86.86.163:/
+
+      - name: Verificar sitio
+        run: |
+          sleep 3
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://webdev.brain.com.ar)
+          echo "HTTP $STATUS"
+          test "$STATUS" = "200"
