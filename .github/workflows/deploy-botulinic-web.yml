@@ -1,4 +1,4 @@
-name: Deploy a webdev (Brain VPS)
+name: Deploy a botulinic.brain.com.ar (Brain VPS)
 
 on:
   push:
@@ -36,6 +36,6 @@ jobs:
       - name: Verificar sitio
         run: |
           sleep 3
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://webdev.brain.com.ar)
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://botulinic.brain.com.ar)
           echo "HTTP $STATUS"
           test "$STATUS" = "200"
