@@ -66,10 +66,10 @@
         <div class="container">
           <div class="row d-flex justify-content-center text-center">
             <div class="col-lg-8">
-              <h1 class="heading-title">Consulta</h1>
+              <h1 class="heading-title">Reservá tu turno</h1>
               <p class="mb-0">
-                Completá el formulario para solicitar una consulta presencial o virtual.
-                Nuestro equipo se pondrá en contacto a la brevedad para confirmar tu turno.
+                Elegí el horario que prefieras y confirmá tu turno al instante.
+                Verificamos tu identidad por WhatsApp; tu turno queda agendado en el momento.
               </p>
             </div>
           </div>
@@ -95,9 +95,9 @@
           <!-- Appointment Info -->
           <div class="col-lg-6">
             <div class="appointment-info">
-              <h3>Solicitud de consulta simple</h3>
-              <p class="mb-4">Completá el formulario en pocos pasos. Nuestros profesionales están listos para ofrecerte
-                la mejor atención según tus necesidades.</p>
+              <h3>Turnos online, al instante</h3>
+              <p class="mb-4">Elegí tratamiento, sede y horario disponible. Confirmás con un código que
+                te enviamos por WhatsApp y tu turno queda agendado en el momento.</p>
 
               <div class="info-items">
                 <div class="info-item d-flex align-items-center mb-3" data-aos="fade-up" data-aos-delay="200">
@@ -142,67 +142,20 @@
             </div>
           </div><!-- End Appointment Info -->
 
-          <!-- Appointment Form -->
+          <!-- Appointment Widget (turnos online en vivo) -->
           <div class="col-lg-6">
             <div class="appointment-form-wrapper" data-aos="fade-up" data-aos-delay="200">
-              <form method="post" class="appointment-form webhook-form"
-                data-webhook="https://webhook.botulinic.com.ar/webhook/form-web">
-                <div class="row gy-3">
-
-                  <div class="col-md-6">
-                    <input type="text" name="name" class="form-control" placeholder="Nombre completo" required="">
-                  </div>
-
-                  <div class="col-md-6">
-                    <input type="email" name="email" class="form-control" placeholder="Email" required="">
-                  </div>
-
-                  <div class="col-md-6">
-                    <input type="tel" name="phone" class="form-control" placeholder="Teléfono" required="">
-                  </div>
-
-                  <div class="col-md-6">
-                    <select name="department" class="form-select" required="">
-                      <option value="">Seleccionar tratamiento</option>
-                      <option value="hiperhidrosis">Hiperhidrosis</option>
-                      <option value="migrana">Migraña</option>
-                      <option value="bruxismo">Bruxismo</option>
-                      <option value="tinnitus">Tinnitus</option>
-                      <option value="neuralgia">Neuralgia</option>
-                      <option value="general">Consulta General</option>
-                    </select>
-                  </div>
-
-                  <div class="col-md-6">
-                    <input type="date" name="date" class="form-control" required="">
-                  </div>
-
-                  <div class="col-md-6">
-                    <select name="doctor" class="form-select" required="">
-                      <option value="">Seleccionar profesional</option>
-                      <option value="dr-angelillo">Dr. Diego Angelillo</option>
-                    </select>
-                  </div>
-
-                  <div class="col-12">
-                    <textarea class="form-control" name="message" rows="5"
-                      placeholder="Describí tu consulta o motivo de visita (opcional)"></textarea>
-                  </div>
-
-                  <div class="col-12">
-                    <div class="loading">Enviando</div>
-                    <div class="error-message"></div>
-                    <div class="sent-message">Tu solicitud fue enviada. Te contactaremos pronto.</div>
-
-                    <button type="submit" class="btn btn-appointment w-100">
-                      <i class="bi bi-calendar-plus me-2"></i>Enviar solicitud
-                    </button>
-                  </div>
-
-                </div>
-              </form>
+              <!-- Widget de turnos de Brain Platform: muestra horarios reales y agenda
+                   al instante. Solo pacientes registrados; nueva consulta → WhatsApp.
+                   El widget emite su altura por postMessage (auto-resize). -->
+              <iframe id="booking-widget"
+                src="https://platformdev.brain.com.ar/book"
+                title="Reservá tu turno online"
+                width="100%" height="760" scrolling="no"
+                style="border:none;border-radius:16px;box-shadow:0 6px 30px rgba(0,0,0,.08);background:#fff;display:block;"
+                allow="clipboard-write"></iframe>
             </div>
-          </div><!-- End Appointment Form -->
+          </div><!-- End Appointment Widget -->
 
         </div>
 
@@ -215,8 +168,8 @@
                 <div class="step-icon">
                   <i class="bi bi-person-fill"></i>
                 </div>
-                <h5>Completá tus datos</h5>
-                <p>Ingresá tu información personal y seleccioná el tratamiento de interés</p>
+                <h5>Elegí tu turno</h5>
+                <p>Seleccioná tratamiento, sede y el horario disponible que prefieras</p>
               </div>
             </div><!-- End Step -->
 
@@ -226,8 +179,8 @@
                 <div class="step-icon">
                   <i class="bi bi-calendar-event"></i>
                 </div>
-                <h5>Elegí la fecha</h5>
-                <p>Seleccioná la fecha en la que preferís realizar tu consulta</p>
+                <h5>Verificá por WhatsApp</h5>
+                <p>Te enviamos un código a tu WhatsApp para confirmar tu identidad</p>
               </div>
             </div><!-- End Step -->
 
@@ -237,8 +190,8 @@
                 <div class="step-icon">
                   <i class="bi bi-check-circle"></i>
                 </div>
-                <h5>Confirmación</h5>
-                <p>Recibirás una confirmación y los detalles de tu turno por email o WhatsApp</p>
+                <h5>Turno confirmado</h5>
+                <p>Tu turno queda agendado al instante y recibís los detalles por WhatsApp</p>
               </div>
             </div><!-- End Step -->
 
@@ -325,6 +278,22 @@
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
   <script src="assets/js/chat-widget.js"></script>
+
+  <!-- Auto-resize del widget de turnos: el iframe emite su altura por postMessage. -->
+  <script>
+    (function () {
+      var frame = document.getElementById('booking-widget');
+      if (!frame) return;
+      window.addEventListener('message', function (e) {
+        // Aceptar solo mensajes del origen del widget (Brain Platform).
+        if (!/platform.*\.brain\.com\.ar$/.test(new URL(e.origin).hostname)) return;
+        var d = e.data || {};
+        if (d.type === 'book-resize' && typeof d.height === 'number' && d.height > 200) {
+          frame.style.height = d.height + 'px';
+        }
+      });
+    })();
+  </script>
 
 </body>
 
