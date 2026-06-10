@@ -144,7 +144,9 @@
 
           <!-- Appointment Widget (turnos online en vivo) -->
           <div class="col-lg-6">
-            <div class="appointment-form-wrapper" data-aos="fade-up" data-aos-delay="200">
+            <!-- Sin data-aos: el widget de turnos es la CTA principal, no debe quedar
+                 oculto (opacity:0) hasta que AOS dispare con el scroll. -->
+            <div class="appointment-form-wrapper">
               <!-- Widget de turnos de Brain Platform: muestra horarios reales y agenda
                    al instante. Solo pacientes registrados; nueva consulta → WhatsApp.
                    El widget emite su altura por postMessage (auto-resize). -->
