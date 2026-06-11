@@ -152,10 +152,10 @@
                    al instante. Solo pacientes registrados; nueva consulta → WhatsApp.
                    El widget emite su altura por postMessage (auto-resize). -->
               <iframe id="booking-widget"
-                src="https://platformdev.brain.com.ar/book"
+                src="https://platformdev.brain.com.ar/book?layout=fixed"
                 title="Reservá tu turno online"
-                width="100%" height="600" scrolling="auto"
-                style="border:none;border-radius:16px;box-shadow:0 6px 30px rgba(0,0,0,.08);background:#fff;display:block;transition:height .2s ease;"
+                width="100%" height="540" scrolling="no"
+                style="border:none;border-radius:16px;box-shadow:0 6px 30px rgba(0,0,0,.08);background:#fff;display:block;"
                 allow="clipboard-write"></iframe>
             </div>
           </div><!-- End Appointment Widget -->
@@ -282,24 +282,10 @@
   <script src="assets/js/main.js"></script>
   <script src="assets/js/chat-widget.js"></script>
 
-  <!-- Auto-resize del widget de turnos: el iframe emite su altura por postMessage. -->
-  <script>
-    (function () {
-      var frame = document.getElementById('booking-widget');
-      if (!frame) return;
-      window.addEventListener('message', function (e) {
-        // Aceptar solo mensajes del origen del widget (Brain Platform).
-        try { if (!/platform.*\.brain\.com\.ar$/.test(new URL(e.origin).hostname)) return; } catch (x) { return; }
-        var d = e.data || {};
-        if (d.type === 'book-resize' && typeof d.height === 'number' && d.height > 200) {
-          // Seguir EXACTAMENTE la altura emitida (+8 anti-redondeo). SIN piso fijo: cada
-          // vista define su alto, así no quedan espacios en blanco en las vistas cortas
-          // (confirmación, sin-horarios) ni scroll interno en las largas.
-          frame.style.height = (d.height + 8) + 'px';
-        }
-      });
-    })();
-  </script>
+  <!-- Altura FIJA: el widget se carga en modo ?layout=fixed y centra su contenido
+       dentro de esta caja (540px). El marco mide siempre lo mismo en todos los pasos;
+       las vistas cortas quedan centradas con aire equilibrado, no con blanco abajo.
+       Por eso ya no hace falta el auto-resize por postMessage. -->
 
 </body>
 
