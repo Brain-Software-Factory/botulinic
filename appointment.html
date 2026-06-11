@@ -154,8 +154,8 @@
               <iframe id="booking-widget"
                 src="https://platformdev.brain.com.ar/book"
                 title="Reservá tu turno online"
-                width="100%" height="820" scrolling="auto"
-                style="border:none;border-radius:16px;box-shadow:0 6px 30px rgba(0,0,0,.08);background:#fff;display:block;min-height:640px;"
+                width="100%" height="600" scrolling="auto"
+                style="border:none;border-radius:16px;box-shadow:0 6px 30px rgba(0,0,0,.08);background:#fff;display:block;transition:height .2s ease;"
                 allow="clipboard-write"></iframe>
             </div>
           </div><!-- End Appointment Widget -->
@@ -287,14 +287,15 @@
     (function () {
       var frame = document.getElementById('booking-widget');
       if (!frame) return;
-      var MIN_H = 640;
       window.addEventListener('message', function (e) {
         // Aceptar solo mensajes del origen del widget (Brain Platform).
         try { if (!/platform.*\.brain\.com\.ar$/.test(new URL(e.origin).hostname)) return; } catch (x) { return; }
         var d = e.data || {};
         if (d.type === 'book-resize' && typeof d.height === 'number' && d.height > 200) {
-          // +24 de colchón para evitar scroll interno por redondeos. Nunca por debajo del mínimo.
-          frame.style.height = Math.max(MIN_H, d.height + 24) + 'px';
+          // Seguir EXACTAMENTE la altura emitida (+8 anti-redondeo). SIN piso fijo: cada
+          // vista define su alto, así no quedan espacios en blanco en las vistas cortas
+          // (confirmación, sin-horarios) ni scroll interno en las largas.
+          frame.style.height = (d.height + 8) + 'px';
         }
       });
     })();
