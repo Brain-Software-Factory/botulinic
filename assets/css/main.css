@@ -24,27 +24,42 @@
   --heading-color: #1f2f31;
   /* Color for headings, subheadings and title throughout the website */
   --accent-color: #afc6e8;
-  /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
+  /* Soft brand tint — keep for decorative backgrounds, tints and subtle accents. NOT accessible as text/CTA color on white. */
+  --accent-strong: #2f6f8f;
+  /* Accessible deep teal-blue (≈5.5:1 on white) — use for link/button TEXT, icons and solid CTAs that carry white text. */
+  --accent-strong-hover: #25596f;
+  /* Darker hover/active state for --accent-strong (≈7.7:1 on white). */
   --surface-color: #ffffff;
   /* The surface color is used as a background of boxed elements within sections, such as cards, icon boxes, or other elements that require a visual separation from the global background. */
   --contrast-color: #ffffff;
   /* Contrast color for text, ensuring readability against backgrounds of accent, heading, or default colors. */
+
+  /* Polish system — layered soft shadows + consistent radius scale (used site-wide for a calm, premium medical feel) */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+  --shadow-xs: 0 1px 2px rgba(31, 47, 49, 0.04), 0 2px 6px rgba(31, 47, 49, 0.05);
+  --shadow-sm: 0 2px 6px rgba(31, 47, 49, 0.05), 0 6px 16px rgba(31, 47, 49, 0.06);
+  --shadow-md: 0 4px 12px rgba(31, 47, 49, 0.06), 0 12px 28px rgba(31, 47, 49, 0.08);
+  --shadow-lg: 0 8px 24px rgba(31, 47, 49, 0.08), 0 24px 56px rgba(31, 47, 49, 0.10);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Nav Menu Colors - The following color variables are used specifically for the navigation menu. They are separate from the global colors to allow for more customization options */
 :root {
   --nav-color: #363f40;
   /* The default color of the main navmenu links */
-  --nav-hover-color: #afc6e8;
-  /* Applied to main navmenu links when they are hovered over or active */
+  --nav-hover-color: #2f6f8f;
+  /* Accessible deep teal-blue applied to main navmenu links when hovered/active (matches --accent-strong) */
   --nav-mobile-background-color: #ffffff;
   /* Used as the background color for mobile navigation menu */
   --nav-dropdown-background-color: #ffffff;
   /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
   --nav-dropdown-color: #363f40;
   /* Used for navigation links of the dropdown items in the navigation menu. */
-  --nav-dropdown-hover-color: #afc6e8;
-  /* Similar to --nav-hover-color, this color is applied to dropdown navigation links when they are hovered over. */
+  --nav-dropdown-hover-color: #2f6f8f;
+  /* Accessible deep teal-blue applied to dropdown navigation links when hovered (matches --accent-strong). */
 }
 
 /* Color Presets - These classes override global colors when applied to any section or element, providing reuse of the sam color scheme. */
@@ -77,14 +92,38 @@ body {
 }
 
 a {
-  color: var(--accent-color);
+  color: var(--accent-strong);
   text-decoration: none;
   transition: 0.3s;
 }
 
 a:hover {
-  color: color-mix(in srgb, var(--accent-color), transparent 25%);
+  color: var(--accent-strong-hover);
   text-decoration: none;
+}
+
+/* Accessibility — visible keyboard focus ring across all interactive elements */
+:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent-strong), transparent 35%);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+a:focus:not(:focus-visible),
+button:focus:not(:focus-visible) {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 h1,
@@ -178,24 +217,27 @@ h6 {
 }
 
 .header .logo h1 span {
-  color: var(--accent-color);
+  color: var(--accent-strong);
 }
 
 .header .btn-getstarted,
 .header .btn-getstarted:focus {
   color: var(--contrast-color);
-  background: var(--accent-color);
+  background: var(--accent-strong);
   font-size: 14px;
   padding: 8px 26px;
   margin: 0;
-  border-radius: 4px;
-  transition: 0.3s;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+  transition: all 0.3s var(--ease-out);
 }
 
 .header .btn-getstarted:hover,
 .header .btn-getstarted:focus:hover {
   color: var(--contrast-color);
-  background: color-mix(in srgb, var(--accent-color), transparent 15%);
+  background: var(--accent-strong-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 @media (max-width: 1200px) {
@@ -396,7 +438,7 @@ h6 {
 
   .navmenu a i:hover,
   .navmenu a:focus i:hover {
-    background-color: var(--accent-color);
+    background-color: var(--accent-strong);
     color: var(--contrast-color);
   }
 
@@ -408,7 +450,7 @@ h6 {
 
   .navmenu .active i,
   .navmenu .active:focus i {
-    background-color: var(--accent-color);
+    background-color: var(--accent-strong);
     color: var(--contrast-color);
     transform: rotate(180deg);
   }
@@ -514,7 +556,7 @@ h6 {
 }
 
 .footer .social-links a:hover {
-  color: var(--accent-color);
+  color: var(--accent-strong);
   border-color: var(--accent-color);
 }
 
@@ -558,7 +600,7 @@ h6 {
 }
 
 .footer .footer-links ul a:hover {
-  color: var(--accent-color);
+  color: var(--accent-strong);
 }
 
 .footer .footer-contact p {
@@ -634,11 +676,12 @@ h6 {
   left: 15px;
   bottom: -15px;
   z-index: 99999;
-  background-color: var(--accent-color);
+  background-color: var(--accent-strong);
+  box-shadow: var(--shadow-md);
   width: 44px;
   height: 44px;
   border-radius: 50px;
-  transition: all 0.4s;
+  transition: all 0.4s var(--ease-out);
 }
 
 .scroll-top i {
@@ -648,8 +691,9 @@ h6 {
 }
 
 .scroll-top:hover {
-  background-color: color-mix(in srgb, var(--accent-color), transparent 20%);
+  background-color: var(--accent-strong-hover);
   color: var(--contrast-color);
+  transform: translateY(-3px);
 }
 
 .scroll-top.active {
@@ -834,7 +878,7 @@ section,
 
 .hero .hero-image .floating-card.emergency-card .card-content i {
   font-size: 2rem;
-  color: var(--accent-color);
+  color: var(--accent-strong);
   padding: 15px;
   background-color: color-mix(in srgb, var(--accent-color), transparent 90%);
   border-radius: 15px;
@@ -873,7 +917,7 @@ section,
   display: block;
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--accent-color);
+  color: var(--accent-strong);
   line-height: 1;
 }
 
@@ -915,7 +959,7 @@ section,
 
 .hero .hero-content .badge-container .hero-badge {
   display: inline-block;
-  background: linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--accent-color), black 20%));
+  background: linear-gradient(135deg, var(--accent-strong), var(--accent-strong-hover));
   color: var(--contrast-color);
   padding: 8px 20px;
   border-radius: 25px;
@@ -982,7 +1026,7 @@ section,
 
 .hero .hero-stats .stat-group .stat i {
   font-size: 2.5rem;
-  color: var(--accent-color);
+  color: var(--accent-strong);
   padding: 15px;
   background: linear-gradient(135deg, color-mix(in srgb, var(--accent-color), transparent 90%) 0%, color-mix(in srgb, var(--accent-color), transparent 95%) 100%);
   border-radius: 20px;
@@ -1031,7 +1075,7 @@ section,
 }
 
 .hero .cta-section .cta-buttons .btn.btn-primary {
-  background: linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--accent-color), black 20%));
+  background: linear-gradient(135deg, var(--accent-strong), var(--accent-strong-hover));
   border: none;
   color: var(--contrast-color);
 }
@@ -1048,8 +1092,8 @@ section,
 }
 
 .hero .cta-section .cta-buttons .btn.btn-secondary:hover {
-  background-color: var(--accent-color);
-  border-color: var(--accent-color);
+  background-color: var(--accent-strong);
+  border-color: var(--accent-strong);
   color: var(--contrast-color);
 }
 
@@ -1077,11 +1121,11 @@ section,
 
 .hero .cta-section .quick-actions .action-link i {
   font-size: 1.25rem;
-  color: var(--accent-color);
+  color: var(--accent-strong);
 }
 
 .hero .cta-section .quick-actions .action-link:hover {
-  color: var(--accent-color);
+  color: var(--accent-strong);
   transform: translateX(5px);
 }
 
@@ -1170,7 +1214,7 @@ section,
   right: 20px;
   width: 60px;
   height: 60px;
-  background: var(--accent-color);
+  background: var(--accent-strong);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1230,7 +1274,7 @@ section,
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--accent-color);
+  color: var(--accent-strong);
   font-weight: 500;
   text-decoration: none;
   font-size: 14px;
@@ -1384,7 +1428,7 @@ section,
 .about .stats-list .stat-row .stat-number span {
   font-size: 3rem;
   font-weight: 200;
-  color: var(--accent-color);
+  color: var(--accent-strong);
   line-height: 1;
 }
 
@@ -1425,7 +1469,7 @@ section,
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--accent-color), #6c5ce7 20%));
+  background: linear-gradient(135deg, var(--accent-strong), color-mix(in srgb, var(--accent-strong), #6c5ce7 25%));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1499,7 +1543,7 @@ section,
 
 .about .specialties-section .specialty-item i {
   font-size: 2.2rem;
-  color: var(--accent-color);
+  color: var(--accent-strong);
   margin-bottom: 1rem;
   transition: color 0.3s ease;
 }
@@ -1512,11 +1556,11 @@ section,
 }
 
 .about .specialties-section .specialty-item:hover i {
-  color: var(--accent-color);
+  color: var(--accent-strong);
 }
 
 .about .specialties-section .specialty-item:hover span {
-  color: var(--accent-color);
+  color: var(--accent-strong);
 }
 
 .about .accreditation-section h3 {
@@ -1685,7 +1729,7 @@ section,
 }
 
 .services .service-card:hover .service-btn {
-  background: var(--accent-color);
+  background: var(--accent-strong);
   color: var(--contrast-color);
 }
 
@@ -1702,7 +1746,7 @@ section,
   position: absolute;
   top: 15px;
   right: 15px;
-  background: var(--accent-color);
+  background: var(--accent-strong);
   color: var(--contrast-color);
   padding: 5px 12px;
   border-radius: 15px;
@@ -1726,7 +1770,7 @@ section,
 
 .services .service-header .service-category {
   background: color-mix(in srgb, var(--accent-color), transparent 90%);
-  color: var(--accent-color);
+  color: var(--accent-strong);
   padding: 6px 15px;
   border-radius: 20px;
   font-size: 12px;
@@ -1760,7 +1804,7 @@ section,
 .services .service-icon {
   width: 70px;
   height: 70px;
-  background: linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--accent-color), #007acc 50%));
+  background: linear-gradient(135deg, var(--accent-strong), color-mix(in srgb, var(--accent-strong), #007acc 35%));
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -1863,7 +1907,7 @@ section,
 .services .services-stats .stat-item .stat-number {
   font-size: 48px;
   font-weight: 700;
-  color: var(--accent-color);
+  color: var(--accent-strong);
   display: block;
   line-height: 1;
   margin-bottom: 10px;
@@ -1876,7 +1920,7 @@ section,
 }
 
 .services .appointment-banner {
-  background: linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--accent-color), #007acc 30%));
+  background: linear-gradient(135deg, var(--accent-strong), color-mix(in srgb, var(--accent-strong-hover), #007acc 25%));
   border-radius: 25px;
   overflow: hidden;
   position: relative;
@@ -1951,7 +1995,7 @@ section,
 
 .services .appointment-banner .banner-actions .btn-primary {
   background: var(--contrast-color);
-  color: var(--accent-color);
+  color: var(--accent-strong);
   padding: 15px 30px;
   border-radius: 25px;
   text-decoration: none;
@@ -2075,7 +2119,7 @@ section,
 
 .appointmnet .info-items .info-item .icon-wrapper i {
   font-size: 1.5rem;
-  color: var(--accent-color);
+  color: var(--accent-strong);
 }
 
 .appointmnet .info-items .info-item h5 {
@@ -2103,7 +2147,7 @@ section,
 }
 
 .appointmnet .emergency-contact .emergency-card h6 i {
-  color: var(--accent-color);
+  color: var(--accent-strong);
 }
 
 .appointmnet .emergency-contact .emergency-card p {
@@ -2112,14 +2156,105 @@ section,
 }
 
 .appointmnet .emergency-contact .emergency-card p strong {
-  color: var(--accent-color);
+  color: var(--accent-strong);
 }
 
+/* Booking widget — rendered as a native card of this site (matches surface + radius
+   + layered soft shadow used across cards). The iframe sits flush inside a subtle
+   bordered frame so it reads as part of the page, not an embedded foreign box. */
 .appointmnet .appointment-form-wrapper {
+  position: relative;
   background-color: var(--surface-color);
+  padding: 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 70%);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: box-shadow 0.4s var(--ease-out);
+}
+
+.appointmnet .appointment-form-wrapper:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.appointmnet .appointment-form-wrapper #booking-widget {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 6px);
+  background: var(--surface-color);
+}
+
+/* Branded loading skeleton — shown until the iframe fires `load`, then .is-loaded
+   fades it out. Uses the soft brand tint so the wait feels native and calm. */
+.appointmnet .appointment-form-wrapper .booking-skeleton {
+  position: absolute;
+  inset: 0.5rem;
+  border-radius: calc(var(--radius-lg) - 6px);
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--accent-color), transparent 88%),
+      color-mix(in srgb, var(--accent-color), transparent 96%));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
   padding: 2rem;
-  border-radius: 15px;
-  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+  transition: opacity 0.5s var(--ease-out), visibility 0.5s var(--ease-out);
+}
+
+.appointmnet .appointment-form-wrapper .booking-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+      transparent,
+      color-mix(in srgb, var(--surface-color), transparent 40%),
+      transparent);
+  transform: translateX(-100%);
+  animation: booking-shimmer 1.6s var(--ease-out) infinite;
+}
+
+@keyframes booking-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.appointmnet .appointment-form-wrapper .booking-skeleton .booking-spinner {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 4px solid color-mix(in srgb, var(--accent-color), transparent 55%);
+  border-top-color: var(--accent-strong);
+  animation: booking-spin 0.9s linear infinite;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes booking-spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.appointmnet .appointment-form-wrapper .booking-skeleton .booking-skeleton-text {
+  position: relative;
+  z-index: 1;
+  color: var(--accent-strong-hover);
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Hidden state — toggled by main.js when the iframe finishes loading */
+.appointmnet .appointment-form-wrapper.is-loaded .booking-skeleton {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .appointmnet .appointment-form .form-control,
@@ -2158,7 +2293,7 @@ section,
 }
 
 .appointmnet .appointment-form .btn-appointment {
-  background-color: var(--accent-color);
+  background-color: var(--accent-strong);
   border: none;
   color: var(--contrast-color);
   padding: 0.875rem 2rem;
@@ -2194,7 +2329,7 @@ section,
   transform: translateX(-50%);
   width: 40px;
   height: 40px;
-  background-color: var(--accent-color);
+  background-color: var(--accent-strong);
   color: var(--contrast-color);
   border-radius: 50%;
   display: flex;
@@ -2251,7 +2386,7 @@ section,
 
 @media (max-width: 768px) {
   .appointmnet .appointment-form-wrapper {
-    padding: 1.5rem;
+    padding: 0.4rem;
     margin-top: 2rem;
   }
 
@@ -2289,7 +2424,7 @@ section,
 
 .contact .info-box i {
   font-size: 32px;
-  color: var(--accent-color);
+  color: var(--accent-strong);
   border-radius: 50%;
   padding: 15px;
   background: color-mix(in srgb, var(--accent-color), transparent 90%);
@@ -2370,7 +2505,7 @@ section,
 }
 
 .contact .webhook-form button[type=submit] {
-  background: var(--accent-color);
+  background: var(--accent-strong);
   border: 0;
   padding: 12px 34px;
   color: var(--contrast-color);
@@ -2397,7 +2532,7 @@ section,
 
 .contact .webhook-form .loading {
   background: #fff;
-  color: var(--accent-color);
+  color: var(--accent-strong);
 }
 
 .contact .webhook-form .loading:before {
@@ -2446,14 +2581,14 @@ section,
   height: 48px;
   border-radius: 50%;
   background: var(--surface-color);
-  color: var(--accent-color);
+  color: var(--accent-strong);
   font-size: 18px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
 }
 
 .contact .social-links a:hover {
-  background: var(--accent-color);
+  background: var(--accent-strong);
   color: var(--contrast-color);
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
@@ -2507,7 +2642,7 @@ section,
   padding: 8px 20px;
   background-color: color-mix(in srgb, var(--accent-color), transparent 90%);
   border-radius: 30px;
-  color: var(--accent-color);
+  color: var(--accent-strong);
   font-size: 0.95rem;
   margin-bottom: 20px;
 }
@@ -2561,7 +2696,7 @@ section,
 
 .terms-of-service .tos-content .content-section .info-box i {
   font-size: 1.5rem;
-  color: var(--accent-color);
+  color: var(--accent-strong);
   flex-shrink: 0;
 }
 
@@ -2610,7 +2745,7 @@ section,
 
 .terms-of-service .tos-content .content-section .alert-box i {
   font-size: 2rem;
-  color: var(--accent-color);
+  color: var(--accent-strong);
   flex-shrink: 0;
 }
 
@@ -2690,7 +2825,7 @@ section,
   content: "•";
   position: absolute;
   left: 8px;
-  color: var(--accent-color);
+  color: var(--accent-strong);
 }
 
 .terms-of-service .tos-content .content-section .notice-box {
@@ -2705,7 +2840,7 @@ section,
 
 .terms-of-service .tos-content .content-section .notice-box i {
   font-size: 1.5rem;
-  color: var(--accent-color);
+  color: var(--accent-strong);
   flex-shrink: 0;
 }
 
@@ -2737,7 +2872,7 @@ section,
 .terms-of-service .tos-contact .contact-box .contact-icon {
   width: 60px;
   height: 60px;
-  background-color: var(--accent-color);
+  background-color: var(--accent-strong);
   border-radius: 15px;
   display: flex;
   align-items: center;
@@ -2769,7 +2904,7 @@ section,
   align-items: center;
   gap: 8px;
   padding: 12px 25px;
-  background-color: var(--accent-color);
+  background-color: var(--accent-strong);
   color: var(--contrast-color);
   border-radius: 30px;
   text-decoration: none;
@@ -2879,7 +3014,7 @@ section,
 }
 
 .privacy .privacy-content .privacy-section .highlight-box {
-  background: linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--accent-color), #000000 20%));
+  background: linear-gradient(135deg, var(--accent-strong), var(--accent-strong-hover));
   padding: 40px;
   border-radius: 15px;
   text-align: center;
@@ -2924,7 +3059,7 @@ section,
 
 .privacy .privacy-content .privacy-section .security-measures .measure-item i {
   font-size: 36px;
-  color: var(--accent-color);
+  color: var(--accent-strong);
   margin-bottom: 20px;
   display: block;
 }
@@ -2960,7 +3095,7 @@ section,
 
 .privacy .privacy-content .privacy-section .rights-list .right-item i {
   font-size: 24px;
-  color: var(--accent-color);
+  color: var(--accent-strong);
   margin-right: 20px;
   margin-top: 5px;
   min-width: 24px;
@@ -3046,7 +3181,7 @@ section,
 
 .privacy .privacy-content .contact-section .contact-info .contact-item i {
   font-size: 18px;
-  color: var(--accent-color);
+  color: var(--accent-strong);
   margin-right: 15px;
   min-width: 18px;
 }

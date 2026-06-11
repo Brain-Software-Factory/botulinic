@@ -4,9 +4,60 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Inicio - Botulinic</title>
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+  <title>Botulinic | Hiperhidrosis y Toxina Botulínica en Buenos Aires</title>
+  <meta name="description" content="Clínica del Dr. Diego Angelillo: tratamientos con toxina botulínica para hiperhidrosis, migraña, bruxismo, tinnitus y neuralgia. Sedes en Recoleta y Nordelta.">
+  <meta name="keywords" content="toxina botulínica, hiperhidrosis, migraña, bruxismo, tinnitus, neuralgia, Dr. Diego Angelillo, clínica, Recoleta, Nordelta, Buenos Aires, Botulinic">
+  <link rel="canonical" href="https://botulinic.brain.com.ar/index.html">
+  <meta name="theme-color" content="#2f6f8f">
+  <link rel="manifest" href="site.webmanifest">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Botulinic | Hiperhidrosis y Toxina Botulínica en Buenos Aires">
+  <meta property="og:description" content="Clínica del Dr. Diego Angelillo: tratamientos con toxina botulínica para hiperhidrosis, migraña, bruxismo, tinnitus y neuralgia. Sedes en Recoleta y Nordelta.">
+  <meta property="og:url" content="https://botulinic.brain.com.ar/index.html">
+  <meta property="og:image" content="https://botulinic.brain.com.ar/assets/img/health/staff-diego-wide.webp">
+  <meta property="og:site_name" content="Botulinic">
+  <meta property="og:locale" content="es_AR">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Botulinic | Hiperhidrosis y Toxina Botulínica en Buenos Aires">
+  <meta name="twitter:description" content="Clínica del Dr. Diego Angelillo: tratamientos con toxina botulínica para hiperhidrosis, migraña, bruxismo, tinnitus y neuralgia. Sedes en Recoleta y Nordelta.">
+  <meta name="twitter:image" content="https://botulinic.brain.com.ar/assets/img/health/staff-diego-wide.webp">
+
+  <!-- Structured Data: MedicalClinic -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalClinic",
+    "name": "Botulinic",
+    "url": "https://botulinic.brain.com.ar",
+    "image": "https://botulinic.brain.com.ar/assets/img/health/staff-diego-wide.webp",
+    "telephone": "+5491162633886",
+    "email": "clinica.botulinic@gmail.com",
+    "founder": "Dr. Diego Angelillo",
+    "medicalSpecialty": ["Dermatology", "Neurology"],
+    "areaServed": "Buenos Aires",
+    "sameAs": ["https://www.instagram.com/botulinic_"],
+    "address": [
+      {
+        "@type": "PostalAddress",
+        "streetAddress": "Beruti 2347, PB Depto 3",
+        "addressLocality": "Recoleta, CABA",
+        "addressRegion": "Buenos Aires",
+        "addressCountry": "AR"
+      },
+      {
+        "@type": "PostalAddress",
+        "streetAddress": "Boulevard del Mirador 220, Bahía de Nordelta",
+        "addressLocality": "Tigre",
+        "addressRegion": "Buenos Aires",
+        "addressCountry": "AR"
+      }
+    ]
+  }
+  </script>
 
   <!-- Favicons -->
   <link href="assets/img/logos/BRAINFLOW_LOGO.png" rel="icon">
@@ -67,7 +118,7 @@
         <div class="row align-items-center">
           <div class="col-lg-5">
             <div class="hero-image" data-aos="fade-right" data-aos-delay="100">
-              <img src="assets/img/health/dr-diego.webp" alt="Healthcare Professional" class="img-fluid main-image">
+              <img src="assets/img/health/dr-diego.webp" alt="Dr. Diego Angelillo, especialista en tratamientos con toxina botulínica" class="img-fluid main-image">
               <div class="floating-card emergency-card" data-aos="fade-up" data-aos-delay="300">
                 <div class="card-content">
                   <i class="bi bi-telephone-fill"></i>
@@ -135,11 +186,11 @@
                     <i class="bi bi-calendar-check"></i>
                     <span>Ver horarios disponibles</span>
                   </a>
-                  <a href="#" class="action-link">
+                  <a href="#" onclick="document.getElementById('chat-widget-button')?.click(); return false;" class="action-link">
                     <i class="bi bi-chat-dots"></i>
                     <span>Chatear con soporte</span>
                   </a>
-                  <a href="#" class="action-link">
+                  <a href="appointment.html" class="action-link">
                     <i class="bi bi-file-medical"></i>
                     <span>Portal del paciente</span>
                   </a>
@@ -176,13 +227,13 @@
             <div class="service-card">
 
               <div class="service-image">
-                <img src="assets/img/instagram/square/hiperhidrosis.png" alt="Service" class="img-fluid" loading="lazy">
+                <img src="assets/img/instagram/square/hiperhidrosis.png" alt="Tratamiento de Hiperhidrosis con toxina botulínica" class="img-fluid" loading="lazy">
               </div>
               <div class="service-content">
                 <h3>Hiperhidrosis</h3>
                 <p>Controla el exceso de sudoración de forma segura y eficaz. Soluciones clínicas para manos, axilas o
                   pies que te permitirán recuperar la seguridad en tus interacciones sociales y profesionales.</p>
-                <a href="#" class="service-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                <a href="services.html" class="service-link">Saber más <i class="fas fa-arrow-right"></i></a>
               </div>
             </div>
           </div><!-- End Service Card -->
@@ -191,14 +242,14 @@
             <div class="service-card">
 
               <div class="service-image">
-                <img src="assets/img/instagram/square/migrana.png" alt="Service" class="img-fluid" loading="lazy">
+                <img src="assets/img/instagram/square/migrana.png" alt="Tratamiento de Migraña con toxina botulínica" class="img-fluid" loading="lazy">
               </div>
               <div class="service-content">
                 <h3>Migraña</h3>
                 <p>Alivio efectivo para los dolores de cabeza intensos y recurrentes. Recupera tu bienestar con
                   tratamientos diseñados para reducir la frecuencia y la intensidad de las crisis, mejorando tu calidad
                   de vida diaria.</p>
-                <a href="#" class="service-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                <a href="services.html" class="service-link">Saber más <i class="fas fa-arrow-right"></i></a>
               </div>
             </div>
           </div><!-- End Service Card -->
@@ -207,13 +258,13 @@
             <div class="service-card">
 
               <div class="service-image">
-                <img src="assets/img/instagram/square/bruxismo.png" alt="Service" class="img-fluid" loading="lazy">
+                <img src="assets/img/instagram/square/bruxismo.png" alt="Tratamiento de Bruxismo con toxina botulínica" class="img-fluid" loading="lazy">
               </div>
               <div class="service-content">
                 <h3>Bruxismo</h3>
                 <p>Tratamiento especializado para el rechinar de dientes involuntario. Protege tu dentadura, reduce la
                   tensión mandibular y previene dolores cervicales y de cabeza asociados a la presión nocturna.</p>
-                <a href="#" class="service-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                <a href="services.html" class="service-link">Saber más <i class="fas fa-arrow-right"></i></a>
               </div>
             </div>
           </div><!-- End Service Card -->
@@ -222,13 +273,13 @@
             <div class="service-card">
 
               <div class="service-image">
-                <img src="assets/img/instagram/square/tinnitus.png" alt="Service" class="img-fluid" loading="lazy">
+                <img src="assets/img/instagram/square/tinnitus.png" alt="Tratamiento de Tinnitus con toxina botulínica" class="img-fluid" loading="lazy">
               </div>
               <div class="service-content">
                 <h3>Tinnitus</h3>
                 <p>Manejo integral para la percepción de zumbidos o pitidos en los oídos. Terapias enfocadas en
                   disminuir la molestia sonora y mejorar tu capacidad de concentración y descanso.</p>
-                <a href="#" class="service-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                <a href="services.html" class="service-link">Saber más <i class="fas fa-arrow-right"></i></a>
               </div>
             </div>
           </div><!-- End Service Card -->
@@ -237,14 +288,14 @@
             <div class="service-card">
 
               <div class="service-image">
-                <img src="assets/img/instagram/square/neuralgia.png" alt="Service" class="img-fluid" loading="lazy">
+                <img src="assets/img/instagram/square/neuralgia.png" alt="Tratamiento de Neuralgia con toxina botulínica" class="img-fluid" loading="lazy">
               </div>
               <div class="service-content">
                 <h3>Neuralgia</h3>
                 <p>Tratamiento para el alivio de dolores punzantes o crónicos en las zonas nerviosas. Recupera la
                   funcionalidad y calma el malestar con enfoques precisos que actúan directamente sobre el origen del
                   dolor.</p>
-                <a href="#" class="service-link">Saber más <i class="fas fa-arrow-right"></i></a>
+                <a href="services.html" class="service-link">Saber más <i class="fas fa-arrow-right"></i></a>
               </div>
             </div>
           </div><!-- End Service Card -->
@@ -288,7 +339,7 @@
           <ul>
             <li><a href="index.html">Inicio</a></li>
             <li><a href="about.html">Nosotros</a></li>
-            <li><a href="services.html">Servicios</a></li>
+            <li><a href="services.html">Tratamientos</a></li>
             <li><a href="terms.html">Términos y condiciones</a></li>
             <li><a href="privacy.html">Política de privacidad</a></li>
           </ul>

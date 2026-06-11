@@ -4,13 +4,112 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Consulta - Botulinic</title>
-  <meta name="description" content="">
-  <meta name="keywords" content="">
+  <title>Reservá tu turno online | Botulinic</title>
+  <meta name="description"
+    content="Agendá tu turno online en Botulinic. Elegí tratamiento, sede y horario disponible y confirmá al instante por WhatsApp.">
+  <meta name="keywords"
+    content="turno online, reservar turno, Botulinic, toxina botulínica, hiperhidrosis, migraña, bruxismo, Recoleta, Nordelta">
+  <link rel="canonical" href="https://botulinic.brain.com.ar/appointment.html">
+  <meta name="theme-color" content="#2f6f8f">
 
-  <!-- Favicons -->
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Reservá tu turno online | Botulinic">
+  <meta property="og:description"
+    content="Agendá tu turno online en Botulinic. Elegí tratamiento, sede y horario disponible y confirmá al instante por WhatsApp.">
+  <meta property="og:url" content="https://botulinic.brain.com.ar/appointment.html">
+  <meta property="og:image" content="https://botulinic.brain.com.ar/assets/img/health/staff-diego-wide.webp">
+  <meta property="og:site_name" content="Botulinic">
+  <meta property="og:locale" content="es_AR">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Reservá tu turno online | Botulinic">
+  <meta name="twitter:description"
+    content="Agendá tu turno online en Botulinic. Elegí tratamiento, sede y horario disponible y confirmá al instante por WhatsApp.">
+  <meta name="twitter:image" content="https://botulinic.brain.com.ar/assets/img/health/staff-diego-wide.webp">
+
+  <!-- Favicons & Manifest -->
   <link href="assets/img/logos/BRAINFLOW_LOGO.png" rel="icon">
   <link href="assets/img/logos/BRAINFLOW_LOGO.png" rel="apple-touch-icon">
+  <link rel="manifest" href="site.webmanifest">
+
+  <!-- Structured Data: MedicalClinic -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalClinic",
+    "name": "Botulinic",
+    "url": "https://botulinic.brain.com.ar",
+    "image": "https://botulinic.brain.com.ar/assets/img/health/staff-diego-wide.webp",
+    "telephone": "+5491162633886",
+    "email": "clinica.botulinic@gmail.com",
+    "medicalSpecialty": "Neurology",
+    "areaServed": {
+      "@type": "AdministrativeArea",
+      "name": "Buenos Aires, Argentina"
+    },
+    "founder": {
+      "@type": "Physician",
+      "name": "Dr. Diego Angelillo"
+    },
+    "physician": {
+      "@type": "Physician",
+      "name": "Dr. Diego Angelillo"
+    },
+    "sameAs": [
+      "https://www.instagram.com/botulinic_"
+    ],
+    "location": [
+      {
+        "@type": "MedicalClinic",
+        "name": "Botulinic — Recoleta",
+        "telephone": "+5491162633886",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Beruti 2347, PB Depto 3",
+          "addressLocality": "Recoleta",
+          "addressRegion": "CABA",
+          "addressCountry": "AR"
+        }
+      },
+      {
+        "@type": "MedicalClinic",
+        "name": "Botulinic — Nordelta",
+        "telephone": "+5491162633886",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Boulevard del Mirador 220, Bahía de Nordelta",
+          "addressLocality": "Tigre",
+          "addressRegion": "Buenos Aires",
+          "addressCountry": "AR"
+        }
+      }
+    ]
+  }
+  </script>
+
+  <!-- Structured Data: Breadcrumb -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "https://botulinic.brain.com.ar/index.html"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Consulta",
+        "item": "https://botulinic.brain.com.ar/appointment.html"
+      }
+    ]
+  }
+  </script>
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -147,15 +246,21 @@
           <div class="col-lg-6">
             <!-- Sin data-aos: el widget de turnos es la CTA principal, no debe quedar
                  oculto (opacity:0) hasta que AOS dispare con el scroll. -->
-            <div class="appointment-form-wrapper">
+            <div class="appointment-form-wrapper" id="booking-wrapper">
+              <!-- Skeleton/spinner de marca: se muestra hasta que el iframe dispara `load`.
+                   main.js agrega la clase .is-loaded al wrapper y lo desvanece. -->
+              <div class="booking-skeleton" id="booking-skeleton" aria-hidden="true">
+                <div class="booking-spinner"></div>
+                <p class="booking-skeleton-text">Cargando los horarios disponibles…</p>
+              </div>
               <!-- Widget de turnos de Brain Platform: muestra horarios reales y agenda
                    al instante. Solo pacientes registrados; nueva consulta → WhatsApp.
-                   El widget emite su altura por postMessage (auto-resize). -->
+                   El widget emite su altura por postMessage (main.js escucha y ajusta
+                   la altura, validando el origin por seguridad). -->
               <iframe id="booking-widget"
                 src="https://platformdev.brain.com.ar/book?layout=fixed"
                 title="Reservá tu turno online"
                 width="100%" height="540" scrolling="no"
-                style="border:none;border-radius:16px;box-shadow:0 6px 30px rgba(0,0,0,.08);background:#fff;display:block;"
                 allow="clipboard-write"></iframe>
             </div>
           </div><!-- End Appointment Widget -->
@@ -282,10 +387,10 @@
   <script src="assets/js/main.js"></script>
   <script src="assets/js/chat-widget.js"></script>
 
-  <!-- Altura FIJA: el widget se carga en modo ?layout=fixed y centra su contenido
-       dentro de esta caja (540px). El marco mide siempre lo mismo en todos los pasos;
-       las vistas cortas quedan centradas con aire equilibrado, no con blanco abajo.
-       Por eso ya no hace falta el auto-resize por postMessage. -->
+  <!-- Altura: el widget arranca en 540px (modo ?layout=fixed) y, si emite su altura
+       por postMessage desde su origin (https://platformdev.brain.com.ar), main.js la
+       aplica con auto-resize. El skeleton de marca se oculta cuando el iframe dispara
+       `load`. Ver assets/js/main.js (bloque "Booking widget"). -->
 
 </body>
 

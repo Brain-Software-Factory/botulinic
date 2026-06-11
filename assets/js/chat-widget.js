@@ -125,6 +125,13 @@
       sendBtn.disabled = true;
     }
 
+    // Timeout de seguridad: si el backend tarda o devuelve un 5xx, abortamos para
+    // que el spinner del botón no quede colgado. ~20s de margen.
+    var controller = new AbortController();
+    var timeoutId = setTimeout(function () {
+      controller.abort();
+    }, 20000);
+
     fetch(config.webhook.url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -133,8 +140,12 @@
         message: message,
         route: config.webhook.route,
       }),
+      signal: controller.signal,
     })
       .then(function (response) {
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status);
+        }
         return response.json();
       })
       .then(function (data) {
@@ -159,6 +170,7 @@
         console.error("Chat widget error:", err);
       })
       .finally(function () {
+        clearTimeout(timeoutId);
         if (sendBtn) sendBtn.disabled = false;
       });
   }

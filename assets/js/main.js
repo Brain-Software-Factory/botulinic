@@ -113,4 +113,55 @@
    */
   new PureCounter();
 
+  /**
+   * Booking widget — native integration
+   *
+   * 1) Skeleton/spinner de marca: se oculta cuando el iframe dispara `load`
+   *    (agregamos .is-loaded al wrapper; el CSS lo desvanece).
+   * 2) Auto-resize por postMessage: el widget puede emitir su altura desde su
+   *    origin. Validamos el origin por seguridad y ajustamos la altura del iframe,
+   *    con un mínimo de respaldo para que nunca colapse.
+   */
+  (function bookingWidget() {
+    const iframe = document.getElementById('booking-widget');
+    if (!iframe) return;
+
+    const wrapper = document.getElementById('booking-wrapper');
+    const ALLOWED_ORIGIN = 'https://platformdev.brain.com.ar';
+    const MIN_HEIGHT = 540; // px — respaldo: el widget nunca queda más bajo que esto
+
+    // 1) Ocultar el skeleton al cargar el iframe
+    function markLoaded() {
+      if (wrapper) wrapper.classList.add('is-loaded');
+    }
+    iframe.addEventListener('load', markLoaded);
+    // Respaldo: si el `load` ya ocurrió o tarda demasiado, ocultamos igual
+    if (iframe.contentWindow && iframe.contentDocument &&
+      iframe.contentDocument.readyState === 'complete') {
+      markLoaded();
+    }
+    setTimeout(markLoaded, 8000);
+
+    // 2) Auto-resize seguro por postMessage
+    window.addEventListener('message', function (event) {
+      if (event.origin !== ALLOWED_ORIGIN) return; // guarda de seguridad
+
+      const data = event.data;
+      let height = null;
+
+      if (typeof data === 'number') {
+        height = data;
+      } else if (data && typeof data === 'object') {
+        // Aceptamos varias convenciones de payload sin acoplarnos a una sola
+        height = data.height || data.frameHeight ||
+          (data.type === 'resize' ? data.value : null);
+      }
+
+      height = parseInt(height, 10);
+      if (!height || isNaN(height)) return;
+
+      iframe.style.height = Math.max(height, MIN_HEIGHT) + 'px';
+    });
+  })();
+
 })();

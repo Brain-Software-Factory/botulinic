@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://botulinic.brain.com.ar/sitemap.xml
