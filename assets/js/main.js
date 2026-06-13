@@ -127,7 +127,13 @@
     if (!iframe) return;
 
     const wrapper = document.getElementById('booking-wrapper');
-    const ALLOWED_ORIGIN = 'https://platformdev.brain.com.ar';
+    const config = window.SITE_CONFIG || {};
+    const bookingUrl = config.bookingUrl;
+    if (!bookingUrl) return; // sin URL configurada no hay widget que cargar
+
+    // El origin de confianza para el postMessage se deriva de la URL del widget
+    // (assets/js/config.js), así prod y dev quedan cubiertos sin hardcodear nada.
+    const ALLOWED_ORIGIN = new URL(bookingUrl).origin;
     const MIN_HEIGHT = 540; // px — respaldo: el widget nunca queda más bajo que esto
 
     // 1) Ocultar el skeleton al cargar el iframe
@@ -135,6 +141,9 @@
       if (wrapper) wrapper.classList.add('is-loaded');
     }
     iframe.addEventListener('load', markLoaded);
+    // La URL del widget vive en config.js; la asignamos tras enganchar el listener
+    // de `load` para no perder el evento si el recurso viene de caché.
+    iframe.src = bookingUrl;
     // Respaldo: si el `load` ya ocurrió o tarda demasiado, ocultamos igual
     if (iframe.contentWindow && iframe.contentDocument &&
       iframe.contentDocument.readyState === 'complete') {
