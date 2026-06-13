@@ -13,7 +13,10 @@
     form.addEventListener('submit', function (event) {
       event.preventDefault();
 
-      let webhookUrl = form.getAttribute('data-webhook');
+      // La URL puede venir del atributo data-webhook o, si está vacío, del
+      // config central (assets/js/config.js).
+      let webhookUrl = form.getAttribute('data-webhook') ||
+        (window.SITE_CONFIG && window.SITE_CONFIG.formWebhook);
       let loadingEl = form.querySelector('.loading');
       let errorEl = form.querySelector('.error-message');
       let sentEl = form.querySelector('.sent-message');
