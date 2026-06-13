@@ -1,0 +1,41 @@
+name: Deploy a botulinic.com.ar (Prod VPS)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-botulinic-prod
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # No hace falta checkout: el deploy lo resuelve `git pull` dentro de la VPS.
+      - name: Configurar SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.BRAIN_DEPLOY_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          echo "194.163.134.161 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJAc625FDOFuRywbaIq9eebs6bL9Aj+DFDtVNiwsVm7f" >> ~/.ssh/known_hosts
+
+      # Corre el script canónico de la VPS: git pull origin main -> docker stack rm
+      # landing -> espera -> docker stack deploy. Apunta SOLO a /root/botulinic, no
+      # toca el resto del Swarm.
+      - name: Deploy (deploy.sh en la VPS)
+        run: |
+          ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes root@194.163.134.161 'bash /root/deploy.sh'
+
+      # El stack se reinicia, así que reintentamos hasta que el sitio vuelva a responder.
+      - name: Verificar sitio
+        run: |
+          for i in $(seq 1 10); do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://botulinic.com.ar)
+            echo "Intento $i: HTTP $STATUS"
+            if [ "$STATUS" = "200" ]; then exit 0; fi
+            sleep 6
+          done
+          echo "El sitio no respondió 200 tras los reintentos"
+          exit 1
