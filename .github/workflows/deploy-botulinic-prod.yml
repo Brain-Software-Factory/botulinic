@@ -13,22 +13,30 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      # No hace falta checkout: el deploy lo resuelve `git pull` dentro de la VPS.
+      - name: Checkout
+        uses: actions/checkout@v5
+
       - name: Configurar SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.BRAIN_DEPLOY_KEY }}" > ~/.ssh/deploy_key
+          echo "${{ secrets.BOTULINIC_PROD_DEPLOY_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          echo "194.163.134.161 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJAc625FDOFuRywbaIq9eebs6bL9Aj+DFDtVNiwsVm7f" >> ~/.ssh/known_hosts
+          echo "37.60.227.83 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP8Mab9OnlmDLvKEYvPO4cK1VDbH/qSIMFPzq/WYCGhf" >> ~/.ssh/known_hosts
 
-      # Corre el script canónico de la VPS: git pull origin main -> docker stack rm
-      # landing -> espera -> docker stack deploy. Apunta SOLO a /root/botulinic, no
-      # toca el resto del Swarm.
-      - name: Deploy (deploy.sh en la VPS)
+      # La deploy key está restringida en la VPS con rrsync -wo /root/landing-page,
+      # así que el rsync escribe SOLO en esa carpeta (bind mount del stack Swarm
+      # `landing-page` = nginx:alpine, ruteado por Traefik a botulinic.com.ar con
+      # cert Let's Encrypt). nginx sirve la carpeta al instante, sin restart.
+      - name: Deploy (rsync a /root/landing-page)
         run: |
-          ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes root@194.163.134.161 'bash /root/deploy.sh'
+          rsync -az --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='README.md' \
+            --exclude='Readme.txt' \
+            -e "ssh -i ~/.ssh/deploy_key -o IdentitiesOnly=yes" \
+            ./ root@37.60.227.83:/
 
-      # El stack se reinicia, así que reintentamos hasta que el sitio vuelva a responder.
       - name: Verificar sitio
         run: |
           for i in $(seq 1 10); do
