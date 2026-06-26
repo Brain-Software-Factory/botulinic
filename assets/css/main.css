@@ -25,9 +25,9 @@
   /* Warm charcoal for headings and titles */
   --accent-color: #AFC6E8;
   /* Brand celeste — decorative tints, soft backgrounds, borders and subtle details. NOT accessible as text/CTA color. */
-  --accent-strong: #2E4E7E;
-  /* Deep brand blue (≈8:1 on cream, ≈8.6:1 on white) — links, button TEXT, icons and solid CTAs carrying white text. */
-  --accent-strong-hover: #233D63;
+  --accent-strong: #305FA0;
+  /* Medium brand blue (≈5.5:1 on cream) — links, icons and solid CTAs. */
+  --accent-strong-hover: #24497C;
   /* Darker hover/active state for --accent-strong. */
   --warm-accent: #C98A6A;
   /* Soft terracotta — warm signature accent for underlines and punctual details, never the protagonist. */
@@ -52,16 +52,16 @@
 :root {
   --nav-color: #4C535C;
   /* The default color of the main navmenu links */
-  --nav-hover-color: #2E4E7E;
-  /* Deep brand blue applied to main navmenu links when hovered/active (matches --accent-strong) */
+  --nav-hover-color: #305FA0;
+  /* Medium brand blue applied to main navmenu links when hovered/active (matches --accent-strong) */
   --nav-mobile-background-color: #FFFFFF;
   /* Used as the background color for mobile navigation menu */
   --nav-dropdown-background-color: #FFFFFF;
   /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
   --nav-dropdown-color: #4C535C;
   /* Used for navigation links of the dropdown items in the navigation menu. */
-  --nav-dropdown-hover-color: #2E4E7E;
-  /* Deep brand blue applied to dropdown navigation links when hovered (matches --accent-strong). */
+  --nav-dropdown-hover-color: #305FA0;
+  /* Medium brand blue applied to dropdown navigation links when hovered (matches --accent-strong). */
 }
 
 /* Color Presets - These classes override global colors when applied to any section or element, providing reuse of the sam color scheme. */
@@ -575,16 +575,18 @@ h6 {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid color-mix(in srgb, var(--default-color), transparent 50%);
+  border: none;
   font-size: 16px;
-  color: color-mix(in srgb, var(--default-color), transparent 20%);
+  background: var(--accent-color);
+  color: #1A2230;
   margin-right: 10px;
   transition: 0.3s;
 }
 
 .footer .social-links a:hover {
-  color: var(--accent-strong);
-  border-color: var(--accent-color);
+  background: #9BB8E0;
+  color: #1A2230;
+  transform: translateY(-2px);
 }
 
 .footer h4 {
@@ -1149,15 +1151,16 @@ section,
 }
 
 .hero .cta-section .cta-buttons .btn.btn-primary {
-  background: var(--accent-strong);
-  border: 1px solid var(--accent-strong);
-  color: var(--contrast-color);
+  background: var(--accent-color);
+  border: 1px solid var(--accent-color);
+  color: #1A2230;
   box-shadow: var(--shadow-sm);
 }
 
 .hero .cta-section .cta-buttons .btn.btn-primary:hover {
-  background: var(--accent-strong-hover);
-  border-color: var(--accent-strong-hover);
+  background: #9BB8E0;
+  border-color: #9BB8E0;
+  color: #1A2230;
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
@@ -1321,18 +1324,9 @@ section,
   transition: transform 0.3s ease;
 }
 
-.featured-services .service-image::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 40px;
-  background: linear-gradient(to top, var(--surface-color), transparent);
-}
-
 .featured-services .service-content {
   padding: 28px 28px 32px;
+  text-align: center;
 }
 
 .featured-services .service-content h3 {
@@ -1355,7 +1349,10 @@ section,
 .featured-services .service-link {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
+  width: fit-content;
+  margin-inline: auto;
   color: var(--accent-strong);
   font-weight: 500;
   text-decoration: none;
