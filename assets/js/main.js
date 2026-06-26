@@ -60,11 +60,12 @@
   /**
    * Preloader
    */
+  // El preloader se retira apenas el DOM está listo, sin esperar window.load
+  // (que se demora hasta que descargan todas las imágenes). Evita la pantalla
+  // en blanco prolongada en conexiones lentas.
   const preloader = document.querySelector('#preloader');
   if (preloader) {
-    window.addEventListener('load', () => {
-      preloader.remove();
-    });
+    preloader.remove();
   }
 
   /**
@@ -99,7 +100,9 @@
       mirror: false
     });
   }
-  window.addEventListener('load', aosInit);
+  // Inicializa AOS de inmediato (el script corre al final del body, con el DOM
+  // listo) para que el contenido no quede invisible esperando window.load.
+  aosInit();
 
   /**
    * Initiate glightbox
