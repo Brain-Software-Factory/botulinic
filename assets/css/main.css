@@ -3218,3 +3218,1100 @@ section,
   }
 }
 
+
+    padding: 0.4rem;
+    margin-top: 2rem;
+  }
+
+  .appointmnet .process-steps {
+    margin-top: 3rem;
+  }
+
+  .appointmnet .process-steps .step-item {
+    padding: 1.5rem 0.5rem;
+  }
+}
+
+/* Minimum height so the skeleton fills the card area while /booking-config loads.
+   The wrapper is position:relative and the skeleton is position:absolute. Without
+   a min-height the wrapper would collapse because the native form starts hidden. */
+.appointmnet .appointment-form-wrapper {
+  min-height: 520px;
+}
+
+/*--------------------------------------------------------------
+# Native Booking Form (appointment.html — replaces iframe)
+--------------------------------------------------------------*/
+
+/* ── Step indicator ─────────────────────────────────────────────────────── */
+.native-booking .bk-steps {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-bottom: 1.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.native-booking .bk-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+  text-align: center;
+}
+
+/* Connector line (left-half of each step, except the first) */
+.native-booking .bk-step::before {
+  content: '';
+  position: absolute;
+  top: 15px;
+  right: 50%;
+  width: 100%;
+  height: 2px;
+  background: color-mix(in srgb, var(--accent-color), transparent 60%);
+  z-index: 0;
+}
+.native-booking .bk-step:first-child::before { display: none; }
+
+.native-booking .bk-step.done::before {
+  background: var(--accent-strong);
+}
+
+.native-booking .bk-step > span {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--accent-color), transparent 70%);
+  color: color-mix(in srgb, var(--default-color), transparent 30%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8rem;
+  position: relative;
+  z-index: 1;
+  transition: background 0.25s, color 0.25s;
+  border: 2px solid transparent;
+}
+
+.native-booking .bk-step > small {
+  font-size: 0.68rem;
+  margin-top: 4px;
+  color: color-mix(in srgb, var(--default-color), transparent 45%);
+  line-height: 1.2;
+}
+
+.native-booking .bk-step.active > span {
+  background: var(--accent-strong);
+  color: var(--contrast-color);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--accent-strong), transparent 55%);
+}
+
+.native-booking .bk-step.active > small {
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+.native-booking .bk-step.done > span {
+  background: color-mix(in srgb, var(--accent-strong), transparent 10%);
+  color: var(--contrast-color);
+}
+
+/* ── Panel title ────────────────────────────────────────────────────────── */
+.native-booking .bk-panel-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--heading-color);
+  margin-bottom: 1.25rem;
+}
+
+/* ── Slot grid ──────────────────────────────────────────────────────────── */
+.native-booking .bk-slots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.native-booking .bk-slot {
+  padding: 0.45rem 0.25rem;
+  border: 1.5px solid color-mix(in srgb, var(--accent-color), transparent 40%);
+  border-radius: var(--radius-sm);
+  background: var(--surface-color);
+  color: var(--default-color);
+  font-size: 0.88rem;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.18s var(--ease-out);
+  line-height: 1.3;
+}
+
+.native-booking .bk-slot:hover {
+  border-color: var(--accent-strong);
+  background: color-mix(in srgb, var(--accent-color), transparent 88%);
+  transform: translateY(-1px);
+}
+
+.native-booking .bk-slot.selected {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: var(--contrast-color);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--accent-strong), transparent 55%);
+}
+
+.native-booking .bk-slots-hint,
+.native-booking .bk-slots-empty {
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--default-color), transparent 45%);
+  text-align: center;
+  padding: 0.75rem 0 0.25rem;
+  margin: 0;
+}
+
+.native-booking .bk-slots-loading {
+  font-size: 0.85rem;
+  color: color-mix(in srgb, var(--default-color), transparent 40%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.75rem 0;
+}
+
+/* ── Identity tabs ──────────────────────────────────────────────────────── */
+.native-booking .bk-id-tabs {
+  display: flex;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid color-mix(in srgb, var(--accent-color), transparent 40%);
+  overflow: hidden;
+}
+
+.native-booking .bk-id-tab {
+  flex: 1;
+  padding: 0.55rem 0.75rem;
+  border: none;
+  background: var(--surface-color);
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  text-align: center;
+}
+
+.native-booking .bk-id-tab:first-child {
+  border-right: 1.5px solid color-mix(in srgb, var(--accent-color), transparent 40%);
+}
+
+.native-booking .bk-id-tab.active {
+  background: var(--accent-strong);
+  color: var(--contrast-color);
+}
+
+.native-booking .bk-id-tab:not(.active):hover {
+  background: color-mix(in srgb, var(--accent-color), transparent 88%);
+}
+
+/* ── Patient card (DNI found) ───────────────────────────────────────────── */
+.native-booking .bk-patient-card {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  background: color-mix(in srgb, var(--accent-color), transparent 88%);
+  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 55%);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 1rem;
+  font-size: 0.9rem;
+  color: var(--default-color);
+}
+
+.native-booking .bk-patient-card i {
+  color: var(--accent-strong);
+}
+
+/* ── OTP code input ─────────────────────────────────────────────────────── */
+.native-booking .bk-otp-input {
+  letter-spacing: 0.45rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+/* ── Result screen (step 4) ─────────────────────────────────────────────── */
+.native-booking .bk-result-icon {
+  text-align: center;
+  font-size: 3.25rem;
+  line-height: 1;
+}
+
+.native-booking .bk-turno-card {
+  background: color-mix(in srgb, var(--accent-color), transparent 88%);
+  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 55%);
+  border-radius: var(--radius-md);
+  padding: 0.875rem 1.125rem;
+  margin-top: 1rem;
+}
+
+.native-booking .bk-turno-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 0.4rem 0;
+  font-size: 0.92rem;
+  color: var(--default-color);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent-color), transparent 65%);
+}
+
+.native-booking .bk-turno-row:last-child {
+  border-bottom: none;
+}
+
+.native-booking .bk-turno-row i {
+  color: var(--accent-strong);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Mobile tweaks */
+@media (max-width: 576px) {
+  .native-booking .bk-slots-grid {
+    grid-template-columns: repeat(auto-fill, minmax(66px, 1fr));
+    gap: 0.4rem;
+  }
+
+  .native-booking .bk-slot {
+    font-size: 0.82rem;
+    padding: 0.4rem 0.15rem;
+  }
+
+  .native-booking .bk-otp-input {
+    font-size: 1.25rem;
+    letter-spacing: 0.3rem;
+  }
+}
+
+/*--------------------------------------------------------------
+# Contact Section
+--------------------------------------------------------------*/
+.contact {
+  overflow: hidden;
+}
+
+.contact .info-box {
+  color: var(--default-color);
+  background: var(--surface-color);
+  padding: 30px;
+  height: 100%;
+  border-radius: 15px;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.contact .info-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.12);
+}
+
+.contact .info-box i {
+  font-size: 32px;
+  color: var(--accent-strong);
+  border-radius: 50%;
+  padding: 15px;
+  background: color-mix(in srgb, var(--accent-color), transparent 90%);
+  margin-bottom: 20px;
+  display: inline-block;
+  line-height: 1;
+}
+
+.contact .info-box h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.contact .info-box p {
+  padding: 0;
+  line-height: 24px;
+  font-size: 15px;
+  margin-bottom: 0;
+}
+
+.contact .map-container {
+  overflow: hidden;
+  padding-bottom: 500px;
+  position: relative;
+  height: 0;
+  border-radius: 15px;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.08);
+}
+
+.contact .map-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border: 0;
+}
+
+@media (max-width: 992px) {
+  .contact .map-container {
+    padding-bottom: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact .map-container {
+    padding-bottom: 300px;
+  }
+}
+
+.contact .webhook-form {
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  background: var(--surface-color);
+  border-radius: 15px;
+}
+
+.contact .webhook-form .form-control {
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #ced4da;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+.contact .webhook-form .form-control:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 0.25rem color-mix(in srgb, var(--accent-color), transparent 80%);
+}
+
+.contact .webhook-form .form-control::placeholder {
+  color: #adb5bd;
+}
+
+.contact .webhook-form textarea.form-control {
+  min-height: 120px;
+}
+
+.contact .webhook-form button[type=submit] {
+  background: var(--accent-strong);
+  border: 0;
+  padding: 12px 34px;
+  color: var(--contrast-color);
+  border-radius: 50px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.contact .webhook-form button[type=submit]:hover {
+  background: color-mix(in srgb, var(--accent-color), transparent 20%);
+  transform: scale(1.05);
+}
+
+.contact .webhook-form .loading,
+.contact .webhook-form .error-message,
+.contact .webhook-form .sent-message {
+  display: none;
+  text-align: center;
+  padding: 15px;
+  margin-bottom: 24px;
+  font-weight: 500;
+  border-radius: 10px;
+}
+
+.contact .webhook-form .loading {
+  background: #fff;
+  color: var(--accent-strong);
+}
+
+.contact .webhook-form .loading:before {
+  content: "";
+  display: inline-block;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  margin: 0 10px -6px 0;
+  border: 3px solid var(--accent-color);
+  border-top-color: #fff;
+  animation: animate-loading 1s linear infinite;
+}
+
+.contact .webhook-form .error-message {
+  color: #fff;
+  background: #ed3c0d;
+}
+
+.contact .webhook-form .sent-message {
+  color: #fff;
+  background: #18d26e;
+}
+
+@keyframes animate-loading {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.contact .social-links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.contact .social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--surface-color);
+  color: var(--accent-strong);
+  font-size: 18px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.contact .social-links a:hover {
+  background: var(--accent-strong);
+  color: var(--contrast-color);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 992px) {
+  .contact .info-box {
+    margin-bottom: 20px;
+    padding: 20px;
+  }
+
+  .contact .webhook-form {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact .info-box {
+    padding: 15px;
+  }
+
+  .contact .info-box i {
+    font-size: 28px;
+    padding: 12px;
+  }
+
+  .contact .info-box h3 {
+    font-size: 18px;
+  }
+
+  .contact .social-links {
+    gap: 12px;
+  }
+
+  .contact .social-links a {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+}
+
+/*--------------------------------------------------------------
+# Terms Of Service Section
+--------------------------------------------------------------*/
+.terms-of-service .tos-header {
+  margin-bottom: 60px;
+}
+
+.terms-of-service .tos-header .last-updated {
+  display: inline-block;
+  padding: 8px 20px;
+  background-color: color-mix(in srgb, var(--accent-color), transparent 90%);
+  border-radius: 30px;
+  color: var(--accent-strong);
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+}
+
+.terms-of-service .tos-header h2 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.terms-of-service .tos-header p {
+  color: color-mix(in srgb, var(--default-color), transparent 30%);
+  font-size: 1.1rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.terms-of-service .tos-content .content-section {
+  margin-bottom: 50px;
+  scroll-margin-top: 100px;
+}
+
+.terms-of-service .tos-content .content-section:last-child {
+  margin-bottom: 0;
+}
+
+.terms-of-service .tos-content .content-section h3 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: var(--heading-color);
+}
+
+.terms-of-service .tos-content .content-section p {
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.terms-of-service .tos-content .content-section p:last-child {
+  margin-bottom: 0;
+}
+
+.terms-of-service .tos-content .content-section .info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 20px;
+  background-color: color-mix(in srgb, var(--accent-color), transparent 95%);
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+.terms-of-service .tos-content .content-section .info-box i {
+  font-size: 1.5rem;
+  color: var(--accent-strong);
+  flex-shrink: 0;
+}
+
+.terms-of-service .tos-content .content-section .info-box p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.terms-of-service .tos-content .content-section .list-items {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.terms-of-service .tos-content .content-section .list-items li {
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 12px;
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
+}
+
+.terms-of-service .tos-content .content-section .list-items li:last-child {
+  margin-bottom: 0;
+}
+
+.terms-of-service .tos-content .content-section .list-items li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent-color);
+}
+
+.terms-of-service .tos-content .content-section .alert-box {
+  display: flex;
+  gap: 20px;
+  padding: 25px;
+  background-color: var(--surface-color);
+  border-radius: 15px;
+  border-left: 4px solid var(--accent-color);
+  margin-top: 20px;
+}
+
+.terms-of-service .tos-content .content-section .alert-box i {
+  font-size: 2rem;
+  color: var(--accent-strong);
+  flex-shrink: 0;
+}
+
+.terms-of-service .tos-content .content-section .alert-box .alert-content h5 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.terms-of-service .tos-content .content-section .alert-box .alert-content p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.terms-of-service .tos-content .content-section .prohibited-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+@media (max-width: 576px) {
+  .terms-of-service .tos-content .content-section .prohibited-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.terms-of-service .tos-content .content-section .prohibited-list .prohibited-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+  background-color: var(--surface-color);
+  border-radius: 12px;
+}
+
+.terms-of-service .tos-content .content-section .prohibited-list .prohibited-item i {
+  color: #dc3545;
+  font-size: 1.2rem;
+}
+
+.terms-of-service .tos-content .content-section .prohibited-list .prohibited-item span {
+  font-size: 0.95rem;
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
+}
+
+.terms-of-service .tos-content .content-section .disclaimer-box {
+  background-color: var(--surface-color);
+  padding: 25px;
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+.terms-of-service .tos-content .content-section .disclaimer-box p {
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.terms-of-service .tos-content .content-section .disclaimer-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.terms-of-service .tos-content .content-section .disclaimer-box ul li {
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 12px;
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
+  font-size: 0.95rem;
+}
+
+.terms-of-service .tos-content .content-section .disclaimer-box ul li:last-child {
+  margin-bottom: 0;
+}
+
+.terms-of-service .tos-content .content-section .disclaimer-box ul li::before {
+  content: "•";
+  position: absolute;
+  left: 8px;
+  color: var(--accent-strong);
+}
+
+.terms-of-service .tos-content .content-section .notice-box {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background-color: color-mix(in srgb, var(--accent-color), transparent 95%);
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+.terms-of-service .tos-content .content-section .notice-box i {
+  font-size: 1.5rem;
+  color: var(--accent-strong);
+  flex-shrink: 0;
+}
+
+.terms-of-service .tos-content .content-section .notice-box p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.terms-of-service .tos-contact {
+  margin-top: 60px;
+}
+
+.terms-of-service .tos-contact .contact-box {
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent-color), transparent 95%) 0%, color-mix(in srgb, var(--accent-color), transparent 98%) 100%);
+  border-radius: 20px;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+@media (max-width: 576px) {
+  .terms-of-service .tos-contact .contact-box {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.terms-of-service .tos-contact .contact-box .contact-icon {
+  width: 60px;
+  height: 60px;
+  background-color: var(--accent-strong);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.terms-of-service .tos-contact .contact-box .contact-icon i {
+  font-size: 1.8rem;
+  color: var(--contrast-color);
+}
+
+.terms-of-service .tos-contact .contact-box .contact-content {
+  flex: 1;
+}
+
+.terms-of-service .tos-contact .contact-box .contact-content h4 {
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+}
+
+.terms-of-service .tos-contact .contact-box .contact-content p {
+  color: color-mix(in srgb, var(--default-color), transparent 30%);
+  margin-bottom: 15px;
+}
+
+.terms-of-service .tos-contact .contact-box .contact-content .contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 25px;
+  background-color: var(--accent-strong);
+  color: var(--contrast-color);
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.terms-of-service .tos-contact .contact-box .contact-content .contact-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+@media print {
+  .terms-of-service .tos-contact {
+    display: none;
+  }
+
+  .terms-of-service .content-section {
+    page-break-inside: avoid;
+  }
+}
+
+/*--------------------------------------------------------------
+# Privacy Section
+--------------------------------------------------------------*/
+.privacy .privacy-content {
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.privacy .privacy-content .last-updated {
+  background: color-mix(in srgb, var(--accent-color), transparent 95%);
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 40px;
+  border-left: 4px solid var(--accent-color);
+}
+
+.privacy .privacy-content .last-updated p {
+  margin: 0;
+  color: var(--heading-color);
+}
+
+.privacy .privacy-content .privacy-section {
+  margin-bottom: 50px;
+}
+
+.privacy .privacy-content .privacy-section h3 {
+  font-size: 28px;
+  margin-bottom: 25px;
+  color: var(--heading-color);
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.privacy .privacy-content .privacy-section h3:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50px;
+  height: 3px;
+  background: var(--accent-color);
+  border-radius: 2px;
+}
+
+.privacy .privacy-content .privacy-section h4 {
+  color: var(--heading-color);
+  font-size: 22px;
+  margin: 30px 0 15px 0;
+}
+
+.privacy .privacy-content .privacy-section h5 {
+  color: var(--heading-color);
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.privacy .privacy-content .privacy-section p {
+  margin-bottom: 20px;
+  color: var(--default-color);
+}
+
+.privacy .privacy-content .privacy-section ul,
+.privacy .privacy-content .privacy-section ol {
+  margin: 20px 0;
+  padding-left: 30px;
+}
+
+.privacy .privacy-content .privacy-section ul li,
+.privacy .privacy-content .privacy-section ol li {
+  margin-bottom: 10px;
+  color: var(--default-color);
+}
+
+.privacy .privacy-content .privacy-section .info-box {
+  background: var(--surface-color);
+  padding: 30px;
+  border-radius: 10px;
+  margin: 30px 0;
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+}
+
+.privacy .privacy-content .privacy-section .info-box h4 {
+  color: var(--heading-color);
+  margin-top: 0;
+}
+
+.privacy .privacy-content .privacy-section .highlight-box {
+  background: linear-gradient(135deg, var(--accent-strong), var(--accent-strong-hover));
+  padding: 40px;
+  border-radius: 15px;
+  text-align: center;
+  color: var(--contrast-color);
+  margin: 40px 0;
+}
+
+.privacy .privacy-content .privacy-section .highlight-box i {
+  font-size: 48px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.privacy .privacy-content .privacy-section .highlight-box h4 {
+  color: var(--contrast-color);
+  margin-bottom: 15px;
+}
+
+.privacy .privacy-content .privacy-section .highlight-box p {
+  color: var(--contrast-color);
+  margin: 0;
+  opacity: 0.9;
+}
+
+.privacy .privacy-content .privacy-section .security-measures {
+  margin: 30px 0;
+}
+
+.privacy .privacy-content .privacy-section .security-measures .measure-item {
+  text-align: center;
+  padding: 30px 20px;
+  border-radius: 10px;
+  background: var(--surface-color);
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+  transition: all 0.3s ease;
+}
+
+.privacy .privacy-content .privacy-section .security-measures .measure-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.privacy .privacy-content .privacy-section .security-measures .measure-item i {
+  font-size: 36px;
+  color: var(--accent-strong);
+  margin-bottom: 20px;
+  display: block;
+}
+
+.privacy .privacy-content .privacy-section .security-measures .measure-item h5 {
+  margin-bottom: 15px;
+}
+
+.privacy .privacy-content .privacy-section .security-measures .measure-item p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.privacy .privacy-content .privacy-section .rights-list {
+  margin: 30px 0;
+}
+
+.privacy .privacy-content .privacy-section .rights-list .right-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 25px;
+  margin-bottom: 20px;
+  background: var(--surface-color);
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+  transition: all 0.3s ease;
+}
+
+.privacy .privacy-content .privacy-section .rights-list .right-item:hover {
+  border-color: var(--accent-color);
+  transform: translateX(5px);
+}
+
+.privacy .privacy-content .privacy-section .rights-list .right-item i {
+  font-size: 24px;
+  color: var(--accent-strong);
+  margin-right: 20px;
+  margin-top: 5px;
+  min-width: 24px;
+}
+
+.privacy .privacy-content .privacy-section .rights-list .right-item div {
+  flex: 1;
+}
+
+.privacy .privacy-content .privacy-section .rights-list .right-item div h5 {
+  margin-bottom: 10px;
+}
+
+.privacy .privacy-content .privacy-section .rights-list .right-item div p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.privacy .privacy-content .privacy-section .cookie-types {
+  margin: 30px 0;
+}
+
+.privacy .privacy-content .privacy-section .cookie-types h4 {
+  margin-bottom: 20px;
+}
+
+.privacy .privacy-content .privacy-section .cookie-types .table-responsive {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+}
+
+.privacy .privacy-content .privacy-section .cookie-types .table-responsive .table {
+  margin: 0;
+}
+
+.privacy .privacy-content .privacy-section .cookie-types .table-responsive .table thead {
+  background: color-mix(in srgb, var(--accent-color), transparent 90%);
+}
+
+.privacy .privacy-content .privacy-section .cookie-types .table-responsive .table thead th {
+  border: none;
+  color: var(--heading-color);
+  font-weight: 600;
+  padding: 15px 20px;
+}
+
+.privacy .privacy-content .privacy-section .cookie-types .table-responsive .table tbody td {
+  border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+  padding: 15px 20px;
+  color: var(--default-color);
+}
+
+.privacy .privacy-content .privacy-section .cookie-types .table-responsive .table tbody tr:hover {
+  background: color-mix(in srgb, var(--accent-color), transparent 97%);
+}
+
+.privacy .privacy-content .contact-section {
+  background: color-mix(in srgb, var(--accent-color), transparent 96%);
+  padding: 40px;
+  border-radius: 15px;
+  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 90%);
+}
+
+.privacy .privacy-content .contact-section h3 {
+  color: var(--heading-color);
+  margin-bottom: 20px;
+}
+
+.privacy .privacy-content .contact-section h3:after {
+  background: var(--accent-color);
+}
+
+.privacy .privacy-content .contact-section .contact-info {
+  margin-top: 30px;
+}
+
+.privacy .privacy-content .contact-section .contact-info .contact-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.privacy .privacy-content .contact-section .contact-info .contact-item i {
+  font-size: 18px;
+  color: var(--accent-strong);
+  margin-right: 15px;
+  min-width: 18px;
+}
+
+.privacy .privacy-content .contact-section .contact-info .contact-item span {
+  color: var(--default-color);
+}
+
+@media (max-width: 768px) {
+  .privacy .privacy-content {
+    font-size: 15px;
+  }
+
+  .privacy .privacy-content .privacy-section h3 {
+    font-size: 24px;
+  }
+
+  .privacy .privacy-content .privacy-section h4 {
+    font-size: 20px;
+  }
+
+  .privacy .privacy-content .privacy-section .security-measures .row>div {
+    margin-bottom: 20px;
+  }
+
+  .privacy .privacy-content .privacy-section .rights-list .right-item {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .privacy .privacy-content .privacy-section .rights-list .right-item i {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+}
+

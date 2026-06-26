@@ -115,7 +115,7 @@
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Ubuntu:wght@400;500;700&family=Poppins:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
 
   <!-- Vendor CSS Files -->
@@ -246,20 +246,240 @@
             <!-- Sin data-aos: el widget de turnos es la CTA principal, no debe quedar
                  oculto (opacity:0) hasta que AOS dispare con el scroll. -->
             <div class="appointment-form-wrapper" id="booking-wrapper">
-              <!-- Skeleton/spinner de marca: se muestra hasta que el iframe dispara `load`.
-                   main.js agrega la clase .is-loaded al wrapper y lo desvanece. -->
+              <!-- Skeleton de carga: visible mientras main.js trae /booking-config.
+                   main.js agrega .is-loaded al wrapper para desvanecerlo. -->
               <div class="booking-skeleton" id="booking-skeleton" aria-hidden="true">
                 <div class="booking-spinner"></div>
                 <p class="booking-skeleton-text">Cargando los horarios disponibles…</p>
               </div>
-              <!-- Widget de turnos de Brain Platform: muestra horarios reales y agenda
-                   al instante. Solo pacientes registrados; nueva consulta → WhatsApp.
-                   El widget emite su altura por postMessage (main.js escucha y ajusta
-                   la altura, validando el origin por seguridad). -->
-              <iframe id="booking-widget"
-                title="Reservá tu turno online"
-                width="100%" height="540" scrolling="no"
-                allow="clipboard-write"></iframe>
+
+              <!-- Formulario nativo de reserva (4 pasos). Oculto hasta que
+                   /booking-config cargue exitosamente (main.js lo muestra). -->
+              <div class="appointment-form native-booking p-3 p-md-4"
+                   id="native-booking" hidden aria-live="polite">
+
+                <!-- Indicador de pasos -->
+                <nav class="bk-steps" aria-label="Pasos del proceso de reserva">
+                  <div class="bk-step" data-step="1" aria-label="Paso 1: Servicio"><span aria-hidden="true">1</span><small>Servicio</small></div>
+                  <div class="bk-step" data-step="2" aria-label="Paso 2: Horario"><span aria-hidden="true">2</span><small>Horario</small></div>
+                  <div class="bk-step" data-step="3" aria-label="Paso 3: Identidad"><span aria-hidden="true">3</span><small>Identidad</small></div>
+                  <div class="bk-step" data-step="4" aria-label="Paso 4: Confirmación"><span aria-hidden="true">4</span><small>Listo</small></div>
+                </nav>
+
+                <!-- ── Paso 1: Servicio + Sede ─────────────────────────────── -->
+                <div class="bk-panel" id="bk-panel-1" hidden>
+                  <h5 class="bk-panel-title">¿Qué tratamiento necesitás?</h5>
+
+                  <div class="mb-3">
+                    <label for="bk-servicio" class="form-label">Tratamiento</label>
+                    <select id="bk-servicio" class="form-select" aria-required="true">
+                      <option value="">Seleccioná un tratamiento…</option>
+                    </select>
+                  </div>
+
+                  <div class="mb-4">
+                    <label for="bk-sede" class="form-label">Sede</label>
+                    <select id="bk-sede" class="form-select" aria-required="true">
+                      <option value="">Seleccioná una sede…</option>
+                    </select>
+                  </div>
+
+                  <button class="btn btn-appointment w-100" id="bk-next-1" disabled
+                          aria-label="Ir al paso 2: elegir horario">
+                    Siguiente <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
+                  </button>
+                </div>
+
+                <!-- ── Paso 2: Fecha + Turnos disponibles ─────────────────── -->
+                <div class="bk-panel" id="bk-panel-2" hidden>
+                  <h5 class="bk-panel-title">Elegí fecha y horario</h5>
+
+                  <div class="mb-3">
+                    <label for="bk-fecha" class="form-label">Fecha</label>
+                    <input type="date" id="bk-fecha" class="form-control" aria-required="true">
+                  </div>
+
+                  <div id="bk-slots-wrapper">
+                    <p class="bk-slots-hint" id="bk-slots-hint">
+                      Seleccioná una fecha para ver los horarios disponibles.
+                    </p>
+                    <div class="bk-slots-grid" id="bk-slots-grid"
+                         role="listbox" aria-label="Horarios disponibles" aria-multiselectable="false">
+                    </div>
+                  </div>
+
+                  <div class="d-flex gap-2 mt-4">
+                    <button class="btn btn-outline-secondary flex-fill" id="bk-back-2"
+                            aria-label="Volver al paso 1">
+                      <i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Anterior
+                    </button>
+                    <button class="btn btn-appointment flex-fill" id="bk-next-2" disabled
+                            aria-label="Ir al paso 3: verificar identidad">
+                      Siguiente <i class="bi bi-arrow-right ms-1" aria-hidden="true"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- ── Paso 3: Identidad + OTP ─────────────────────────────── -->
+                <div class="bk-panel" id="bk-panel-3" hidden>
+                  <h5 class="bk-panel-title">Verificá tu identidad</h5>
+
+                  <!-- Tabs: Teléfono / DNI -->
+                  <div class="bk-id-tabs mb-3" role="tablist" aria-label="Método de verificación">
+                    <button class="bk-id-tab active" id="bk-tab-phone"
+                            role="tab" aria-selected="true" aria-controls="bk-panel-phone"
+                            data-tab="phone" type="button">
+                      <i class="bi bi-phone me-1" aria-hidden="true"></i> Teléfono
+                    </button>
+                    <button class="bk-id-tab" id="bk-tab-dni"
+                            role="tab" aria-selected="false" aria-controls="bk-panel-dni"
+                            data-tab="dni" type="button">
+                      <i class="bi bi-person-badge me-1" aria-hidden="true"></i> DNI
+                    </button>
+                  </div>
+
+                  <!-- Panel: Teléfono -->
+                  <div id="bk-panel-phone" role="tabpanel" aria-labelledby="bk-tab-phone">
+                    <div class="mb-3">
+                      <label for="bk-phone" class="form-label">Teléfono WhatsApp</label>
+                      <input type="tel" id="bk-phone" class="form-control"
+                             placeholder="Ej: 5491162633886"
+                             autocomplete="tel" aria-required="true"
+                             aria-describedby="bk-phone-hint">
+                      <div id="bk-phone-hint" class="form-text">
+                        Ingresá el número con código de país, sin el signo +
+                      </div>
+                    </div>
+                    <button class="btn btn-appointment w-100 mb-3" id="bk-send-otp-phone" type="button">
+                      <i class="bi bi-whatsapp me-1" aria-hidden="true"></i> Enviar código por WhatsApp
+                    </button>
+                  </div>
+
+                  <!-- Panel: DNI -->
+                  <div id="bk-panel-dni" role="tabpanel" aria-labelledby="bk-tab-dni" hidden>
+                    <div class="mb-3">
+                      <label for="bk-dni" class="form-label">DNI</label>
+                      <input type="text" id="bk-dni" class="form-control"
+                             placeholder="Ej: 30123456"
+                             inputmode="numeric" pattern="[0-9]+"
+                             autocomplete="off" aria-required="true">
+                    </div>
+                    <button class="btn btn-appointment w-100 mb-3" id="bk-lookup-dni" type="button">
+                      <i class="bi bi-search me-1" aria-hidden="true"></i> Buscar
+                    </button>
+
+                    <!-- Paciente encontrado -->
+                    <div id="bk-dni-found" hidden aria-live="polite">
+                      <div class="bk-patient-card mb-3">
+                        <i class="bi bi-person-check-fill me-2" aria-hidden="true"></i>
+                        <span id="bk-patient-name"></span>
+                        <span class="mx-1 text-muted">—</span>
+                        <span id="bk-patient-phone" class="text-muted"></span>
+                      </div>
+                      <button class="btn btn-appointment w-100 mb-3" id="bk-send-otp-dni" type="button">
+                        <i class="bi bi-whatsapp me-1" aria-hidden="true"></i> Enviar código por WhatsApp
+                      </button>
+                    </div>
+
+                    <!-- Paciente no encontrado -->
+                    <div id="bk-dni-not-found" hidden aria-live="polite">
+                      <div class="alert alert-warning small" role="alert">
+                        No encontramos tu número registrado. Podés reservar directamente por WhatsApp.
+                      </div>
+                      <a id="bk-wa-fallback" href="#" target="_blank" rel="noopener noreferrer"
+                         class="btn btn-success w-100">
+                        <i class="bi bi-whatsapp me-1" aria-hidden="true"></i> Reservar por WhatsApp
+                      </a>
+                    </div>
+                  </div>
+
+                  <!-- Código OTP (aparece luego de enviar el código) -->
+                  <div id="bk-otp-section" hidden aria-live="polite">
+                    <hr class="my-3">
+                    <div class="mb-2">
+                      <label for="bk-otp" class="form-label">Código de verificación</label>
+                      <input type="text" id="bk-otp" class="form-control bk-otp-input"
+                             maxlength="6" inputmode="numeric" pattern="[0-9]{6}"
+                             placeholder="000000" autocomplete="one-time-code"
+                             aria-required="true" aria-describedby="bk-otp-hint">
+                      <div id="bk-otp-hint" class="form-text">
+                        Ingresá el código de 6 dígitos enviado por WhatsApp.
+                        <span id="bk-countdown" aria-live="off"></span>
+                      </div>
+                    </div>
+                    <button class="btn btn-link btn-sm p-0 mb-3" id="bk-resend-otp"
+                            type="button" disabled>
+                      Reenviar código
+                    </button>
+                  </div>
+
+                  <!-- Mensajes de error paso 3 -->
+                  <div id="bk-step3-error" class="alert alert-danger small mt-2"
+                       role="alert" hidden></div>
+
+                  <!-- Navegación -->
+                  <div class="d-flex gap-2 mt-3">
+                    <button class="btn btn-outline-secondary flex-fill" id="bk-back-3"
+                            type="button" aria-label="Volver al paso 2">
+                      <i class="bi bi-arrow-left me-1" aria-hidden="true"></i> Anterior
+                    </button>
+                    <button class="btn btn-appointment flex-fill" id="bk-confirm"
+                            type="button" hidden aria-label="Confirmar turno">
+                      <i class="bi bi-check2 me-1" aria-hidden="true"></i> Confirmar turno
+                    </button>
+                  </div>
+                </div>
+
+                <!-- ── Paso 4: Resultado ────────────────────────────────────── -->
+                <div class="bk-panel" id="bk-panel-4" hidden aria-live="assertive">
+
+                  <!-- Éxito -->
+                  <div id="bk-result-success" hidden>
+                    <div class="bk-result-icon text-success" aria-hidden="true">
+                      <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <h5 class="bk-panel-title text-center mt-2">¡Turno confirmado!</h5>
+                    <div class="bk-turno-card" role="region" aria-label="Detalles del turno">
+                      <div class="bk-turno-row">
+                        <i class="bi bi-calendar-event" aria-hidden="true"></i>
+                        <span id="bk-t-datetime"></span>
+                      </div>
+                      <div class="bk-turno-row">
+                        <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                        <span id="bk-t-sede"></span>
+                      </div>
+                      <div class="bk-turno-row">
+                        <i class="bi bi-clipboard-pulse" aria-hidden="true"></i>
+                        <span id="bk-t-servicio"></span>
+                      </div>
+                    </div>
+                    <p class="small text-muted text-center mt-3">
+                      Vas a recibir los detalles en tu WhatsApp.
+                    </p>
+                    <button class="btn btn-appointment w-100 mt-1" id="bk-new" type="button">
+                      Reservar otro turno
+                    </button>
+                  </div>
+
+                  <!-- Redirección a WhatsApp -->
+                  <div id="bk-result-wa" hidden>
+                    <div class="bk-result-icon" aria-hidden="true"
+                         style="color: #25d366;">
+                      <i class="bi bi-whatsapp"></i>
+                    </div>
+                    <h5 class="bk-panel-title text-center mt-2">Completá tu reserva por WhatsApp</h5>
+                    <p class="small text-muted text-center">
+                      Escribinos por WhatsApp y un asesor te ayuda a agendar tu turno.
+                    </p>
+                    <a id="bk-result-wa-link" href="#" target="_blank"
+                       rel="noopener noreferrer" class="btn btn-success w-100">
+                      <i class="bi bi-whatsapp me-1" aria-hidden="true"></i> Ir a WhatsApp
+                    </a>
+                  </div>
+
+                </div><!-- /paso 4 -->
+
+              </div><!-- /native-booking -->
             </div>
           </div><!-- End Appointment Widget -->
 
@@ -387,11 +607,10 @@
   <script src="assets/js/main.js"></script>
   <script src="assets/js/chat-widget.js"></script>
 
-  <!-- Altura: el widget arranca en 540px (modo ?layout=fixed) y, si emite su altura
-       por postMessage desde su origin, main.js la aplica con auto-resize. La URL del
-       widget y el origin de confianza salen de assets/js/config.js. El skeleton de
-       marca se oculta cuando el iframe dispara `load`. Ver assets/js/main.js (bloque
-       "Booking widget"). -->
+  <!-- Formulario nativo de reserva: main.js llama a /booking-config al cargar,
+       rellena los selects de paso 1 y muestra el formulario. El skeleton de marca
+       se oculta cuando /booking-config responde. Ver assets/js/main.js (bloque
+       "Native booking form"). Los endpoints vienen de assets/js/config.js (apiBase). -->
 
 </body>
 
