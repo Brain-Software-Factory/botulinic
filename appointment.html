@@ -325,21 +325,25 @@
                   <h5 class="bk-panel-title">Verificá tu identidad</h5>
 
                   <!-- Tabs: Teléfono / DNI -->
-                  <div class="bk-id-tabs mb-3" role="tablist" aria-label="Método de verificación">
-                    <button class="bk-id-tab active" id="bk-tab-phone"
-                            role="tab" aria-selected="true" aria-controls="bk-panel-phone"
+                  <!-- La verificación es SOLO por DNI: el teléfono dejó de ser un
+                       identificador único (varios pacientes pueden compartir el mismo
+                       WhatsApp), así que la pestaña Teléfono queda oculta. Quien no
+                       tenga DNI registrado se deriva al bot de WhatsApp. -->
+                  <div class="bk-id-tabs mb-3" role="tablist" aria-label="Método de verificación" hidden>
+                    <button class="bk-id-tab" id="bk-tab-phone"
+                            role="tab" aria-selected="false" aria-controls="bk-panel-phone"
                             data-tab="phone" type="button">
                       <i class="bi bi-phone me-1" aria-hidden="true"></i> Teléfono
                     </button>
-                    <button class="bk-id-tab" id="bk-tab-dni"
-                            role="tab" aria-selected="false" aria-controls="bk-panel-dni"
+                    <button class="bk-id-tab active" id="bk-tab-dni"
+                            role="tab" aria-selected="true" aria-controls="bk-panel-dni"
                             data-tab="dni" type="button">
                       <i class="bi bi-person-badge me-1" aria-hidden="true"></i> DNI
                     </button>
                   </div>
 
-                  <!-- Panel: Teléfono -->
-                  <div id="bk-panel-phone" role="tabpanel" aria-labelledby="bk-tab-phone">
+                  <!-- Panel: Teléfono (deprecado, oculto) -->
+                  <div id="bk-panel-phone" role="tabpanel" aria-labelledby="bk-tab-phone" hidden>
                     <div class="mb-3">
                       <label for="bk-phone" class="form-label">Teléfono WhatsApp</label>
                       <input type="tel" id="bk-phone" class="form-control"
@@ -355,8 +359,8 @@
                     </button>
                   </div>
 
-                  <!-- Panel: DNI -->
-                  <div id="bk-panel-dni" role="tabpanel" aria-labelledby="bk-tab-dni" hidden>
+                  <!-- Panel: DNI (único método de verificación) -->
+                  <div id="bk-panel-dni" role="tabpanel" aria-labelledby="bk-tab-dni">
                     <div class="mb-3">
                       <label for="bk-dni" class="form-label">DNI</label>
                       <input type="text" id="bk-dni" class="form-control"

@@ -143,7 +143,7 @@
       sedes: [], servicios: [],
       sedeCode: '', servicioCode: '',
       fecha: '', slot: null,
-      idMode: 'phone', phone: '', dni: '',
+      idMode: 'dni', phone: '', dni: '',
       otpSent: false, countdownTimer: null, countdownSec: 0
     };
 
@@ -312,8 +312,8 @@
     var btnConfirm     = el('bk-confirm');
 
     function resetStep3() {
-      s.idMode = 'phone'; s.otpSent = false;
-      switchTab('phone');
+      s.idMode = 'dni'; s.otpSent = false;
+      switchTab('dni');
       hide(otpSection); hide(btnConfirm); hide(step3Error);
       hide(dniFound); hide(dniNotFound);
       if (inputPhone) inputPhone.value = '';
